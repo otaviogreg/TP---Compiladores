@@ -1,0 +1,414 @@
+/**
+ * Trabalho Prático de Compiladores - Etapa 1: Analisador Léxico
+ * 
+ * Este script implementa um Analisador Léxico (Lexer) em Java, adaptado
+ * diretamente do modelo de orientação a objetos para compiladores ensinado durante as aulas.
+ * 
+ * Autores: Otávio Andrade, Davi Braga e Hugo Daniel
+ */
+
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.Hashtable;
+
+/**
+ * Classificações de Tokens (Tags).
+ * 
+ * A classe Tag define constantes numéricas para diferenciar tipos de tokens,
+ * como palavras reservadas, identificadores, números e operadores compostos.
+ * Tokens de caractere único (ex: '+', ';') usam seu próprio valor ASCII
+ */
+class Tag {
+    // Definindo a constante global para o fim do arquivo (End Of File). Caractere utilizado nesse modelo de compilador utilizando Java
+    public static final char EOF = (char) 65535;
+
+    public static final int
+        AND = 256,
+        BASIC = 257,
+        DO = 258,
+        ELSE  = 259,
+        EQ = 260,
+        FALSE = 261,
+        GE = 262,
+        ID = 263,
+        IF = 264,
+        LE = 265,
+        NE = 266,
+        NUM = 267,
+        OR = 268,
+        REAL = 269,
+        TEMP = 270,
+        TRUE = 271,
+        WHILE = 272,
+        PROGRAM = 273,
+        BEGIN = 274,
+        END = 275,
+        READ = 276,
+        WRITE = 277,
+        THEN = 278,
+        REPEAT = 279,
+        UNTIL = 280,
+        LITERAL = 281,
+        CHAR_CONST = 282;
+}
+
+/**
+ * Representação base de um Token utilizando as especificações explicadas em sala
+ */
+class Token {
+    public final int tag;
+
+    public Token(int t) {
+        this.tag = t;
+    }
+
+    @Override
+    public String toString() {
+        return "" + (char) tag;
+    }
+}
+
+/**
+ * Token especializado para números (trabalhando apenas com double pelas especificações técnicas passadas no TP)
+ */
+class Num extends Token {
+    public final double floatValue;
+
+    public Num(double floatValue) {
+        super(Tag.NUM);
+        this.floatValue = floatValue;
+    }
+
+    @Override
+    public String toString() {
+        return "" + floatValue;
+    }
+}
+
+/**
+ * Token especializado para palavras (qualquer token que possua caracteres em sua composição)
+ */
+class Word extends Token {
+    private String lexeme = "";
+
+    // Instâncias de palavras e operadores pré-definidos na linguagem
+    public static final Word and = new Word("&&", Tag.AND);
+    public static final Word or = new Word("||", Tag.OR);
+    public static final Word eq = new Word("==", Tag.EQ);
+    public static final Word ne = new Word("!=", Tag.NE);
+    public static final Word le = new Word("<=", Tag.LE);
+    public static final Word ge = new Word(">=", Tag.GE);
+    public static final Word True = new Word("true", Tag.TRUE);
+    public static final Word False = new Word("false", Tag.FALSE);
+
+    public Word(String s, int tag) {
+        super(tag);
+        this.lexeme = s;
+    }
+
+    public String getLexeme() {
+        return lexeme;
+    }
+
+    @Override
+    public String toString() {
+        return lexeme;
+    }
+}
+
+/**
+ * Classe principal do analisador léxico
+ * 
+ * @summary Responsável por ler o arquivo de código fonte caractere por caractere,
+ * ignorar espaços e comentários, gerenciar a contagem de linhas e converter
+ * os lexemas encontrados em Tokens estruturados (Token, Num, Word)
+ */
+class Lexer {
+    public static int line = 1;
+    private char ch = ' ';
+    private FileReader file;
+    private Hashtable<String, Word> words = new Hashtable<String, Word>();
+
+    /**
+     * Associa uma palavra reservada ou token à Tabela de Símbolos.
+    */
+    private void reserve(Word w) {
+        words.put(w.getLexeme(), w);
+    }
+
+    /**
+     * Inicializa a leitura do arquivo e reserva todas as palavras-chave da linguagem.
+     * 
+     * @param fileName Caminho do arquivo de código fonte.
+     * @throws FileNotFoundException Caso o arquivo informado não seja encontrado.
+     */
+    public Lexer(String fileName) throws FileNotFoundException {
+        file = new FileReader(fileName);
+
+        reserve(Word.and);
+        reserve(Word.or);
+        reserve(Word.eq);
+        reserve(Word.ne);
+        reserve(Word.le);
+        reserve(Word.ge);
+        reserve(Word.True);
+        reserve(Word.False);
+
+        // Reserva das palavras-chave da linguagem
+        reserve(new Word("if", Tag.IF));
+        reserve(new Word("else", Tag.ELSE));
+        reserve(new Word("while", Tag.WHILE));
+        reserve(new Word("do", Tag.DO));
+        reserve(new Word("program", Tag.PROGRAM));
+        reserve(new Word("begin", Tag.BEGIN));
+        reserve(new Word("end", Tag.END));
+        reserve(new Word("read", Tag.READ));
+        reserve(new Word("write", Tag.WRITE));
+        reserve(new Word("int", Tag.BASIC));
+        reserve(new Word("float", Tag.BASIC));
+        reserve(new Word("char", Tag.BASIC));
+        reserve(new Word("then", Tag.THEN));
+        reserve(new Word("repeat", Tag.REPEAT));
+        reserve(new Word("until", Tag.UNTIL));
+    }
+
+    /**
+     * Lê o próximo caractere do arquivo fonte e atualiza a variável 'ch'
+     * 
+     * @throws IOException
+     */
+    private void readch() throws IOException {
+        int r = file.read();
+
+        if (r == -1) {
+            ch = Tag.EOF; // Fim do arquivo
+        } else {
+            ch = (char) r;
+        }
+    }
+
+    /**
+     * Avança a leitura e verifica se o próximo caractere coincide com o caractere passado no parâmetro
+     * Utilizado, principalmente, para reconhecimento de palavras com mais de um caractere (por exemplo '==', '<=')
+     * 
+     * @param c Caractere esperado a seguir
+     * @return true se o próximo caractere for igual ao parâmetro 'c', false caso contrário
+     */
+    private boolean readch(char c) throws IOException {
+        readch();
+
+        if (this.ch != c) {
+            return false;
+        }
+
+        this.ch = ' '; // Reseta o caractere para evitar leitura dupla
+        return true;
+    }
+
+    /**
+     * Lê o código fonte sob demanda e retorna o próximo Token identificado. É a pricipal função do analisador léxico.
+     * 
+     * @return Próximo Token reconhecido, na etapa 2 do TP será utilizado para enviar valores ao analisador sintático
+     * @throws IOException
+     */
+    public Token scan() throws IOException {
+        // Ignora espaços em branco, tabulações, novas linhas e comentários
+        for (;; readch()) {
+
+            if (ch == ' ' || ch == '\t' || ch == '\r') {
+                continue;
+            } else if (ch == '\n') {
+                line++;
+
+            } else if (ch == '{') {
+                readch(); 
+                
+                if (ch == '*') {
+                    readch();
+                    
+                    while (ch != Tag.EOF) {
+                        if (ch == '\n') {
+                            line++;
+                        }
+                        
+                        // Se encontrar '*', verificamos se o próximo é '}' para fechar
+                        if (ch == '*') {
+                            readch();
+                            if (ch == '}') {
+                                readch();
+                                break;
+                            } else continue; // Considera o asterisco como parte do comentário e continua a leitura
+                        }
+
+                        readch();
+                    }
+                    
+                    if (ch == Tag.EOF) {
+                        System.err.println("Comentário não fechado na linha " + line);
+                    }
+                }
+            } else {
+                break;
+            }
+        }
+
+        // Reconhecimento de Operadores Compostos
+        switch (ch) {
+            case '&':
+                if (readch('&')) return Word.and; else return new Token('&');
+            case '|':
+                if (readch('|')) return Word.or; else return new Token('|');
+            case '=':
+                if (readch('=')) return Word.eq; else return new Token('=');
+            case '!':
+                if (readch('=')) return Word.ne; else return new Token('!');
+            case '<':
+                if (readch('=')) return Word.le; else return new Token('<');
+            case '>':
+                if (readch('=')) return Word.ge; else return new Token('>');
+        }
+
+        // Reconhecimento de Números Inteiros
+        if (Character.isDigit(ch)) {
+            int value = 0;
+            double finalValue = 0.0;
+
+            do {
+                value = 10 * value + Character.getNumericValue(ch);
+                readch();
+            } while (Character.isDigit(ch));
+
+            if (ch == '.'){
+
+                int acc = 0;
+                int decimalValue = 0;
+                do {
+                    decimalValue = 10 * decimalValue + Character.getNumericValue(ch);
+                    acc++;
+                    readch();
+                } while (Character.isDigit(ch));
+
+                finalValue = value + (decimalValue / Math.pow(10, acc));
+            }
+            
+            return new Num(finalValue);
+        }
+
+        // Reconhecimento de Identificadores e Palavras Reservadas
+        if (Character.isLetter(ch) || ch == '_') {
+
+            StringBuilder sb = new StringBuilder();
+            
+            do {
+                sb.append(ch);
+                readch();
+            } while (Character.isLetterOrDigit(ch) || ch == '_');
+
+            String s = sb.toString();
+            Word w = words.get(s);
+
+            // Se a palavra já estiver na TS, retorna ela mesma
+            if (w != null) {
+                return w;
+            } else {
+                // Caso contrário, se for um novo identificador, insere na TS e a retora
+                w = new Word(s, Tag.ID);
+                words.put(s, w);
+                return w;
+            }
+        }
+
+        // Reconhecimento de cadeias de String
+        if (ch == '"') {
+            StringBuilder sb = new StringBuilder();
+            readch();
+            
+            while (ch != '"' && ch != (char) Tag.EOF) {
+                sb.append(ch);
+                readch();
+            }
+            
+            if (ch == '"') {
+                readch();
+            } else {
+                System.err.println("String não fechada na linha " + line);
+            }
+            
+            return new Word(sb.toString(), Tag.LITERAL);
+        }
+
+        // Reconhecimento de Constantes de Caractere
+        if (ch == '\'') {
+            readch();
+            char characterValue = ch;
+            readch(); // Lê o caractere interno
+            
+            if (ch == '\'') {
+                readch();
+            } else {
+                System.err.println("Constante de caractere mal formatada na linha " + line);
+            }
+            
+            return new Word(String.valueOf(characterValue), Tag.CHAR_CONST);
+        }
+
+        // Fim de Arquivo
+        if (ch == Tag.EOF) {
+            return null;
+        }
+
+        // Reconhecimento default de tokens de caractere único que não possuem nenhuma das especificações tratadas acima (exemplo '+', ';', etc)
+        Token tok = new Token(ch);
+        ch = ' ';
+        return tok;
+    }
+
+    /**
+     * Retorna a TD para consulta de forma pública, permitindo que o analisador sintático acesse os tokens reconhecidos e armazenados
+     * 
+     * @return Hashtable com todas as palavras reservadas e identificadores.
+     */
+    public Hashtable<String, Word> getWords() {
+        return words;
+    }
+}
+
+/**
+ * Classe principal para execução e teste do Analisador Léxico.
+ */
+public class lexicalAnalyzer {
+
+    public static void main(String[] args) {
+
+        String fileName = args[0]; // Primeiro argumento do CLI contendo o caminho do arquivo
+
+        try {
+            Lexer lexer = new Lexer(fileName);
+
+            Token t;
+            int tokenCount = 0;
+
+            // Executa a análise token por token até o fim do arquivo
+            while ((t = lexer.scan()) != null) {
+                tokenCount++;
+                System.out.println("Token de número " + tokenCount + ", linha " + Lexer.line + ", tag: " + t.tag + " e representacao: " + t.toString());
+            }
+
+            // Exibição da Tabela de Símbolos para verificação dos valores inseridos pelo analisador léxico
+            System.out.println("\nTabela de Simbolos:\n");
+
+            Hashtable<String, Word> table = lexer.getWords();
+
+            for (String key : table.keySet()) {
+                Word tableWord = table.get(key);
+                System.out.println("Lexema: " + tableWord.getLexeme() + " e tag: " + tableWord.tag);
+            }
+
+        } catch (FileNotFoundException e) {
+            System.err.println("Arquivo nao encontrado. Erro: " + e.getMessage());
+        } catch (IOException e) {
+            System.err.println("Erro de leitura no arquivo. Erro: " + e.getMessage());
+        }
+    }
+}

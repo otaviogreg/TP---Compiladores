@@ -1,0 +1,114 @@
+Token de número 1, linha 1, tag: 263 e representacao: programa
+Token de número 2, linha 1, tag: 263 e representacao: teste1
+Token de número 3, linha 3, tag: 263 e representacao: base
+Token de número 4, linha 3, tag: 44 e representacao: ,
+Token de número 5, linha 3, tag: 263 e representacao: altura
+Token de número 6, linha 3, tag: 58 e representacao: :
+Token de número 7, linha 3, tag: 257 e representacao: float
+Token de número 8, linha 3, tag: 59 e representacao: ;
+Token de número 9, linha 4, tag: 263 e representacao: perimetro
+Token de número 10, linha 4, tag: 58 e representacao: :
+Token de número 11, linha 4, tag: 257 e representacao: float
+Token de número 12, linha 4, tag: 59 e representacao: ;
+Token de número 13, linha 5, tag: 263 e representacao: area
+Token de número 14, linha 5, tag: 44 e representacao: ,
+Token de número 15, linha 5, tag: 263 e representacao: a
+Token de número 16, linha 5, tag: 263 e representacao: is
+Token de número 17, linha 5, tag: 257 e representacao: float
+Token de número 18, linha 5, tag: 59 e representacao: ;
+Token de número 19, linha 7, tag: 274 e representacao: begin
+Token de número 20, linha 8, tag: 263 e representacao: Write
+Token de número 21, linha 8, tag: 40 e representacao: (
+Token de número 22, linha 8, tag: 281 e representacao: Entre com a altura do retangulo:
+Token de número 23, linha 8, tag: 41 e representacao: )
+Token de número 24, linha 8, tag: 59 e representacao: ;
+Token de número 25, linha 9, tag: 276 e representacao: read
+Token de número 26, linha 9, tag: 40 e representacao: (
+Token de número 27, linha 9, tag: 263 e representacao: altura
+Token de número 28, linha 9, tag: 41 e representacao: )
+Token de número 29, linha 9, tag: 59 e representacao: ;
+Token de número 30, linha 10, tag: 277 e representacao: write
+Token de número 31, linha 10, tag: 40 e representacao: (
+Token de número 32, linha 10, tag: 281 e representacao: Entre com a base do retangulo:
+Token de número 33, linha 10, tag: 41 e representacao: )
+Token de número 34, linha 10, tag: 59 e representacao: ;
+Token de número 35, linha 11, tag: 276 e representacao: read
+Token de número 36, linha 11, tag: 40 e representacao: (
+Token de número 37, linha 11, tag: 263 e representacao: base
+Token de número 38, linha 11, tag: 41 e representacao: )
+Token de número 39, linha 11, tag: 59 e representacao: ;
+Token de número 40, linha 13, tag: 263 e representacao: area
+Token de número 41, linha 13, tag: 61 e representacao: =
+Token de número 42, linha 13, tag: 263 e representacao: base
+Token de número 43, linha 13, tag: 42 e representacao: *
+Token de número 44, linha 13, tag: 263 e representacao: altura
+Token de número 45, linha 13, tag: 59 e representacao: ;
+Token de número 46, linha 15, tag: 263 e representacao: perimetro
+Token de número 47, linha 15, tag: 61 e representacao: =
+Token de número 48, linha 15, tag: 267 e representacao: 2.0
+Token de número 49, linha 15, tag: 42 e representacao: *
+Token de número 50, linha 15, tag: 263 e representacao: base
+Token de número 51, linha 15, tag: 43 e representacao: +
+Token de número 52, linha 15, tag: 267 e representacao: 2.0
+Token de número 53, linha 15, tag: 42 e representacao: *
+Token de número 54, linha 15, tag: 263 e representacao: altura
+Token de número 55, linha 15, tag: 59 e representacao: ;
+Token de número 56, linha 17, tag: 277 e representacao: write
+Token de número 57, linha 17, tag: 281 e representacao: Area: 
+Token de número 58, linha 17, tag: 59 e representacao: ;
+Token de número 59, linha 18, tag: 277 e representacao: write
+Token de número 60, linha 18, tag: 40 e representacao: (
+Token de número 61, linha 18, tag: 263 e representacao: area
+Token de número 62, linha 18, tag: 41 e representacao: )
+Token de número 63, linha 18, tag: 59 e representacao: ;
+Token de número 64, linha 19, tag: 277 e representacao: write
+Token de número 65, linha 19, tag: 40 e representacao: (
+Token de número 66, linha 19, tag: 281 e representacao: Perímetro: 
+Token de número 67, linha 19, tag: 41 e representacao: )
+Token de número 68, linha 19, tag: 59 e representacao: ;
+Token de número 69, linha 20, tag: 277 e representacao: write
+Token de número 70, linha 20, tag: 40 e representacao: (
+Token de número 71, linha 20, tag: 263 e representacao: area
+Token de número 72, linha 20, tag: 41 e representacao: )
+Token de número 73, linha 20, tag: 59 e representacao: ;
+Token de número 74, linha 22, tag: 275 e representacao: end
+Token de número 75, linha 22, tag: 46 e representacao: .
+
+Tabela de Simbolos:
+
+Lexema: true e tag: 271
+Lexema: int e tag: 257
+Lexema: Write e tag: 263
+Lexema: false e tag: 261
+Lexema: <= e tag: 265
+Lexema: && e tag: 256
+Lexema: until e tag: 280
+Lexema: end e tag: 275
+Lexema: altura e tag: 263
+Lexema: teste1 e tag: 263
+Lexema: base e tag: 263
+Lexema: is e tag: 263
+Lexema: program e tag: 273
+Lexema: programa e tag: 263
+Lexema: repeat e tag: 279
+Lexema: == e tag: 260
+Lexema: || e tag: 268
+Lexema: if e tag: 264
+Lexema: while e tag: 272
+Lexema: do e tag: 258
+Lexema: perimetro e tag: 263
+Lexema: read e tag: 276
+Lexema: else e tag: 259
+Lexema: >= e tag: 262
+Lexema: area e tag: 263
+Lexema: write e tag: 277
+Lexema: then e tag: 278
+Lexema: char e tag: 257
+Lexema: begin e tag: 274
+Lexema: a e tag: 263
+Lexema: != e tag: 266
+Lexema: float e tag: 257
+
+Resumo de erros lexicos:
+
+Nenhum erro lexico encontrado. Analise lexica concluida com sucesso.

@@ -11,6 +11,8 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.Hashtable;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Classificações de Tokens (Tags).
@@ -129,12 +131,23 @@ class Lexer {
     private char ch = ' ';
     private FileReader file;
     private Hashtable<String, Word> words = new Hashtable<String, Word>();
+    private List<String> errors = new ArrayList<>();
 
     /**
      * Associa uma palavra reservada ou token à Tabela de Símbolos.
     */
     private void reserve(Word w) {
         words.put(w.getLexeme(), w);
+    }
+
+    private void reportError(String msg) {
+        String full = "Erro lexico na linha " + line + ": " + msg;
+        errors.add(full);
+        System.err.println(full);
+    }
+
+    public List<String> getErrors() {
+        return errors;
     }
 
     /**
@@ -245,7 +258,7 @@ class Lexer {
                     }
                     
                     if (ch == Tag.EOF) {
-                        System.err.println("Comentário não fechado na linha " + line);
+                        reportError("Comentário não fechado na linha " + line);
                     }
                 }
             } else {
@@ -269,30 +282,51 @@ class Lexer {
                 if (readch('=')) return Word.ge; else return new Token('>');
         }
 
-        // Reconhecimento de Números Inteiros
+        // Reconhecimento de Números (inteiros e floats)
         if (Character.isDigit(ch)) {
-            int value = 0;
-            double finalValue = 0.0;
+            StringBuilder sb = new StringBuilder();
+            boolean erro = false;
 
+            // Parte inteira
             do {
-                value = 10 * value + Character.getNumericValue(ch);
+                sb.append(ch);
                 readch();
             } while (Character.isDigit(ch));
 
-            if (ch == '.'){
+            // Parte decimal: float_const ::= digit+ "." digit+
+            if (ch == '.') {
+                sb.append(ch);
+                readch(); // consome o ponto
 
-                int acc = 0;
-                int decimalValue = 0;
-                do {
-                    decimalValue = 10 * decimalValue + Character.getNumericValue(ch);
-                    acc++;
-                    readch();
-                } while (Character.isDigit(ch));
-
-                finalValue = value + (decimalValue / Math.pow(10, acc));
+                if (Character.isDigit(ch)) {
+                    do {
+                        sb.append(ch);
+                        readch();
+                    } while (Character.isDigit(ch));
+                } else {
+                    erro = true;
+                    reportError("float mal formado '" + sb + "' (esperado digito apos o ponto)");
+                }
             }
-            
-            return new Num(finalValue);
+
+            // Número colado em letras (ex: 1c): não é número nem identificador válido
+            if (Character.isLetter(ch) || ch == '_') {
+                while (Character.isLetterOrDigit(ch) || ch == '_') {
+                    sb.append(ch);
+                    readch();
+                }
+                if (!erro) {
+                    erro = true;
+                    reportError("token invalido '" + sb + "' (identificador nao pode comecar com digito)");
+                }
+            }
+
+            // Em caso de erro, descarta o lexema e segue para o próximo token
+            if (erro) {
+                return scan();
+            }
+
+            return new Num(Double.parseDouble(sb.toString()));
         }
 
         // Reconhecimento de Identificadores e Palavras Reservadas
@@ -323,19 +357,19 @@ class Lexer {
         if (ch == '"') {
             StringBuilder sb = new StringBuilder();
             readch();
-            
-            while (ch != '"' && ch != (char) Tag.EOF) {
+
+            while (ch != '"' && ch != '\n' && ch != Tag.EOF) {
                 sb.append(ch);
                 readch();
             }
-            
+
             if (ch == '"') {
                 readch();
-            } else {
-                System.err.println("String não fechada na linha " + line);
+                return new Word(sb.toString(), Tag.LITERAL);
             }
-            
-            return new Word(sb.toString(), Tag.LITERAL);
+
+            reportError("string nao fechada (literal nao pode conter quebra de linha)");
+            return scan();
         }
 
         // Reconhecimento de Constantes de Caractere
@@ -347,7 +381,7 @@ class Lexer {
             if (ch == '\'') {
                 readch();
             } else {
-                System.err.println("Constante de caractere mal formatada na linha " + line);
+                reportError("Constante de caractere mal formatada na linha " + line);
             }
             
             return new Word(String.valueOf(characterValue), Tag.CHAR_CONST);
@@ -405,6 +439,14 @@ public class lexicalAnalyzer {
                 System.out.println("Lexema: " + tableWord.getLexeme() + " e tag: " + tableWord.tag);
             }
 
+            System.out.println("\nResumo de erros lexicos:\n");
+            if (lexer.getErrors().isEmpty()) {
+                System.out.println("Nenhum erro lexico encontrado. Analise lexica concluida com sucesso.");
+            } else {
+                for (String e : lexer.getErrors()) {
+                    System.out.println(e);
+                }
+            }
         } catch (FileNotFoundException e) {
             System.err.println("Arquivo nao encontrado. Erro: " + e.getMessage());
         } catch (IOException e) {

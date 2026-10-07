@@ -1,0 +1,105 @@
+Token de número 1, linha 1, tag: 273 e representacao: program
+Token de número 2, linha 2, tag: 263 e representacao: a
+Token de número 3, linha 2, tag: 44 e representacao: ,
+Token de número 4, linha 2, tag: 263 e representacao: aux
+Token de número 5, linha 2, tag: 58 e representacao: :
+Token de número 6, linha 2, tag: 257 e representacao: int
+Token de número 7, linha 2, tag: 59 e representacao: ;
+Token de número 8, linha 3, tag: 263 e representacao: b
+Token de número 9, linha 3, tag: 58 e representacao: :
+Token de número 10, linha 3, tag: 257 e representacao: float
+Token de número 11, linha 5, tag: 274 e representacao: begin
+Token de número 12, linha 6, tag: 263 e representacao: b
+Token de número 13, linha 6, tag: 61 e representacao: =
+Token de número 14, linha 6, tag: 267 e representacao: 0.0
+Token de número 15, linha 6, tag: 59 e representacao: ;
+Token de número 16, linha 7, tag: 276 e representacao: read
+Token de número 17, linha 7, tag: 40 e representacao: (
+Token de número 18, linha 7, tag: 263 e representacao: a
+Token de número 19, linha 7, tag: 41 e representacao: )
+Token de número 20, linha 7, tag: 59 e representacao: ;
+Token de número 21, linha 8, tag: 276 e representacao: read
+Token de número 22, linha 8, tag: 40 e representacao: (
+Token de número 23, linha 8, tag: 263 e representacao: b
+Token de número 24, linha 8, tag: 41 e representacao: )
+Token de número 25, linha 8, tag: 59 e representacao: ;
+Token de número 26, linha 9, tag: 264 e representacao: if
+Token de número 27, linha 9, tag: 40 e representacao: (
+Token de número 28, linha 9, tag: 263 e representacao: a
+Token de número 29, linha 9, tag: 62 e representacao: >
+Token de número 30, linha 9, tag: 263 e representacao: b
+Token de número 31, linha 9, tag: 41 e representacao: )
+Token de número 32, linha 9, tag: 278 e representacao: then
+Token de número 33, linha 10, tag: 263 e representacao: aux
+Token de número 34, linha 10, tag: 61 e representacao: =
+Token de número 35, linha 10, tag: 263 e representacao: b
+Token de número 36, linha 10, tag: 59 e representacao: ;
+Token de número 37, linha 11, tag: 263 e representacao: b
+Token de número 38, linha 11, tag: 61 e representacao: =
+Token de número 39, linha 11, tag: 263 e representacao: a
+Token de número 40, linha 11, tag: 59 e representacao: ;
+Token de número 41, linha 12, tag: 263 e representacao: a
+Token de número 42, linha 12, tag: 61 e representacao: =
+Token de número 43, linha 12, tag: 263 e representacao: aux
+Token de número 44, linha 13, tag: 275 e representacao: end
+Token de número 45, linha 13, tag: 59 e representacao: ;
+Token de número 46, linha 14, tag: 277 e representacao: write
+Token de número 47, linha 14, tag: 40 e representacao: (
+Token de número 48, linha 14, tag: 263 e representacao: a
+Token de número 49, linha 14, tag: 41 e representacao: )
+Token de número 50, linha 14, tag: 59 e representacao: ;
+Token de número 51, linha 15, tag: 277 e representacao: write
+Token de número 52, linha 15, tag: 40 e representacao: (
+Token de número 53, linha 15, tag: 263 e representacao: b
+Token de número 54, linha 15, tag: 41 e representacao: )
+Token de número 55, linha 15, tag: 59 e representacao: ;
+Token de número 56, linha 17, tag: 264 e representacao: if
+Token de número 57, linha 17, tag: 40 e representacao: (
+Token de número 58, linha 17, tag: 263 e representacao: a
+Token de número 59, linha 17, tag: 37 e representacao: %
+Token de número 60, linha 17, tag: 267 e representacao: 2.0
+Token de número 61, linha 17, tag: 260 e representacao: ==
+Token de número 62, linha 17, tag: 267 e representacao: 0.0
+Token de número 63, linha 17, tag: 41 e representacao: )
+Token de número 64, linha 17, tag: 277 e representacao: write
+Token de número 65, linha 17, tag: 40 e representacao: (
+Erro lexico na linha 17: string nao fechada (literal nao pode conter quebra de linha)
+Token de número 66, linha 18, tag: 259 e representacao: else
+Token de número 67, linha 18, tag: 277 e representacao: write
+Token de número 68, linha 18, tag: 40 e representacao: (
+Token de número 69, linha 18, tag: 281 e representacao: Impar
+Token de número 70, linha 18, tag: 41 e representacao: )
+Token de número 71, linha 18, tag: 59 e representacao: ;
+
+Tabela de Simbolos:
+
+Lexema: true e tag: 271
+Lexema: int e tag: 257
+Lexema: false e tag: 261
+Lexema: <= e tag: 265
+Lexema: && e tag: 256
+Lexema: until e tag: 280
+Lexema: end e tag: 275
+Lexema: program e tag: 273
+Lexema: repeat e tag: 279
+Lexema: == e tag: 260
+Lexema: || e tag: 268
+Lexema: if e tag: 264
+Lexema: while e tag: 272
+Lexema: do e tag: 258
+Lexema: read e tag: 276
+Lexema: else e tag: 259
+Lexema: >= e tag: 262
+Lexema: write e tag: 277
+Lexema: then e tag: 278
+Lexema: char e tag: 257
+Lexema: begin e tag: 274
+Lexema: b e tag: 263
+Lexema: aux e tag: 263
+Lexema: a e tag: 263
+Lexema: != e tag: 266
+Lexema: float e tag: 257
+
+Resumo de erros lexicos:
+
+Erro lexico na linha 17: string nao fechada (literal nao pode conter quebra de linha)

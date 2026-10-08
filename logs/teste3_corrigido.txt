@@ -63,43 +63,37 @@ Token de número 62, linha 17, tag: 267 e representacao: 0.0
 Token de número 63, linha 17, tag: 41 e representacao: )
 Token de número 64, linha 17, tag: 277 e representacao: write
 Token de número 65, linha 17, tag: 40 e representacao: (
-Erro lexico na linha 17: string nao fechada (literal nao pode conter quebra de linha)
-Token de número 66, linha 18, tag: 259 e representacao: else
-Token de número 67, linha 18, tag: 277 e representacao: write
-Token de número 68, linha 18, tag: 40 e representacao: (
-Token de número 69, linha 18, tag: 281 e representacao: Impar
-Token de número 70, linha 18, tag: 41 e representacao: )
-Token de número 71, linha 18, tag: 59 e representacao: ;
+Token de número 66, linha 17, tag: 281 e representacao: Par
+Token de número 67, linha 17, tag: 41 e representacao: )
+Token de número 68, linha 17, tag: 59 e representacao: ;
+Token de número 69, linha 18, tag: 259 e representacao: else
+Token de número 70, linha 18, tag: 277 e representacao: write
+Token de número 71, linha 18, tag: 40 e representacao: (
+Token de número 72, linha 18, tag: 281 e representacao: Impar
+Token de número 73, linha 18, tag: 41 e representacao: )
+Token de número 74, linha 18, tag: 59 e representacao: ;
 
 Tabela de Simbolos:
 
-Lexema: true e tag: 271
 Lexema: int e tag: 257
-Lexema: false e tag: 261
-Lexema: <= e tag: 265
-Lexema: && e tag: 256
-Lexema: until e tag: 280
 Lexema: end e tag: 275
+Lexema: until e tag: 280
 Lexema: program e tag: 273
 Lexema: repeat e tag: 279
-Lexema: == e tag: 260
-Lexema: || e tag: 268
 Lexema: if e tag: 264
 Lexema: while e tag: 272
 Lexema: do e tag: 258
 Lexema: read e tag: 276
 Lexema: else e tag: 259
-Lexema: >= e tag: 262
 Lexema: write e tag: 277
 Lexema: then e tag: 278
 Lexema: char e tag: 257
 Lexema: begin e tag: 274
 Lexema: b e tag: 263
-Lexema: aux e tag: 263
 Lexema: a e tag: 263
-Lexema: != e tag: 266
+Lexema: aux e tag: 263
 Lexema: float e tag: 257
 
 Resumo de erros lexicos:
 
-Erro lexico na linha 17: string nao fechada (literal nao pode conter quebra de linha)
+Nenhum erro lexico encontrado. Analise lexica concluida com sucesso.

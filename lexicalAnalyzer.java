@@ -146,6 +146,14 @@ class Lexer {
         System.err.println(full);
     }
 
+    private boolean isLetter(char c) {
+        return (c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z');
+    }
+
+    private boolean isDigit(char c) {
+        return c >= '0' && c <= '9';
+    }
+
     public List<String> getErrors() {
         return errors;
     }
@@ -258,7 +266,7 @@ class Lexer {
                     }
                     
                     if (ch == Tag.EOF) {
-                        reportError("Comentário não fechado na linha " + line);
+                        reportError("Comentário não fechado");
                     }
                 }
             } else {
@@ -283,7 +291,7 @@ class Lexer {
         }
 
         // Reconhecimento de Números (inteiros e floats)
-        if (Character.isDigit(ch)) {
+        if (isDigit(ch)) {
             StringBuilder sb = new StringBuilder();
             boolean erro = false;
 
@@ -291,18 +299,18 @@ class Lexer {
             do {
                 sb.append(ch);
                 readch();
-            } while (Character.isDigit(ch));
+            } while (isDigit(ch));
 
             // Parte decimal: float_const ::= digit+ "." digit+
             if (ch == '.') {
                 sb.append(ch);
                 readch(); // consome o ponto
 
-                if (Character.isDigit(ch)) {
+                if (isDigit(ch)) {
                     do {
                         sb.append(ch);
                         readch();
-                    } while (Character.isDigit(ch));
+                    } while (isDigit(ch));
                 } else {
                     erro = true;
                     reportError("float mal formado '" + sb + "' (esperado digito apos o ponto)");
@@ -310,8 +318,8 @@ class Lexer {
             }
 
             // Número colado em letras (ex: 1c): não é número nem identificador válido
-            if (Character.isLetter(ch) || ch == '_') {
-                while (Character.isLetterOrDigit(ch) || ch == '_') {
+            if (isLetter(ch) || ch == '_') {
+                while (isLetter(ch) || isDigit(ch) || ch == '_') {
                     sb.append(ch);
                     readch();
                 }
@@ -330,14 +338,14 @@ class Lexer {
         }
 
         // Reconhecimento de Identificadores e Palavras Reservadas
-        if (Character.isLetter(ch) || ch == '_') {
+        if (isLetter(ch) || ch == '_') {
 
             StringBuilder sb = new StringBuilder();
             
             do {
                 sb.append(ch);
                 readch();
-            } while (Character.isLetterOrDigit(ch) || ch == '_');
+            } while (isLetter(ch) || isDigit(ch) || ch == '_');
 
             String s = sb.toString();
             Word w = words.get(s);
@@ -381,7 +389,7 @@ class Lexer {
             if (ch == '\'') {
                 readch();
             } else {
-                reportError("Constante de caractere mal formatada na linha " + line);
+                reportError("Constante de caractere mal formatada");
             }
             
             return new Word(String.valueOf(characterValue), Tag.CHAR_CONST);
@@ -392,6 +400,11 @@ class Lexer {
             return null;
         }
 
+        if (ch > 127) {
+            reportError("caractere invalido '" + ch + "' (fora do alfabeto da linguagem)");
+            ch = ' ';
+            return scan();
+        }
         // Reconhecimento default de tokens de caractere único que não possuem nenhuma das especificações tratadas acima (exemplo '+', ';', etc)
         Token tok = new Token(ch);
         ch = ' ';

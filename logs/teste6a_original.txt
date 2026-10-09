@@ -1,0 +1,180 @@
+Token de número 1, linha 4, tag: 273 e representacao: program
+Token de número 2, linha 4, tag: 263 e representacao: teste6a
+Token de número 3, linha 5, tag: 263 e representacao: a
+Token de número 4, linha 5, tag: 44 e representacao: ,
+Token de número 5, linha 5, tag: 263 e representacao: b
+Token de número 6, linha 5, tag: 44 e representacao: ,
+Token de número 7, linha 5, tag: 263 e representacao: soma
+Token de número 8, linha 5, tag: 58 e representacao: :
+Token de número 9, linha 5, tag: 257 e representacao: int
+Token de número 10, linha 5, tag: 59 e representacao: ;
+Token de número 11, linha 6, tag: 263 e representacao: media
+Token de número 12, linha 6, tag: 44 e representacao: ,
+Token de número 13, linha 6, tag: 263 e representacao: taxa
+Token de número 14, linha 6, tag: 58 e representacao: :
+Token de número 15, linha 6, tag: 257 e representacao: float
+Token de número 16, linha 6, tag: 59 e representacao: ;
+Token de número 17, linha 7, tag: 263 e representacao: letra
+Token de número 18, linha 7, tag: 58 e representacao: :
+Token de número 19, linha 7, tag: 257 e representacao: char
+Token de número 20, linha 7, tag: 59 e representacao: ;
+Token de número 21, linha 9, tag: 274 e representacao: begin
+Token de número 22, linha 10, tag: 263 e representacao: a
+Token de número 23, linha 10, tag: 61 e representacao: =
+Token de número 24, linha 10, tag: 267 e representacao: 10.0
+Token de número 25, linha 10, tag: 59 e representacao: ;
+Token de número 26, linha 11, tag: 263 e representacao: b
+Token de número 27, linha 11, tag: 61 e representacao: =
+Erro lexico na linha 11: token invalido '3x' (identificador nao pode comecar com digito)
+Token de número 28, linha 11, tag: 59 e representacao: ;
+Token de número 29, linha 12, tag: 263 e representacao: taxa
+Token de número 30, linha 12, tag: 61 e representacao: =
+Token de número 31, linha 12, tag: 267 e representacao: 2.5
+Token de número 32, linha 12, tag: 59 e representacao: ;
+Token de número 33, linha 13, tag: 263 e representacao: letra
+Token de número 34, linha 13, tag: 61 e representacao: =
+Token de número 35, linha 13, tag: 282 e representacao: x
+Token de número 36, linha 13, tag: 59 e representacao: ;
+Token de número 37, linha 14, tag: 263 e representacao: soma
+Token de número 38, linha 14, tag: 61 e representacao: =
+Token de número 39, linha 14, tag: 263 e representacao: a
+Token de número 40, linha 14, tag: 43 e representacao: +
+Token de número 41, linha 14, tag: 263 e representacao: b
+Token de número 42, linha 14, tag: 45 e representacao: -
+Token de número 43, linha 14, tag: 267 e representacao: 1.0
+Token de número 44, linha 14, tag: 59 e representacao: ;
+Token de número 45, linha 15, tag: 263 e representacao: media
+Token de número 46, linha 15, tag: 61 e representacao: =
+Token de número 47, linha 15, tag: 40 e representacao: (
+Token de número 48, linha 15, tag: 263 e representacao: a
+Token de número 49, linha 15, tag: 43 e representacao: +
+Token de número 50, linha 15, tag: 263 e representacao: b
+Token de número 51, linha 15, tag: 41 e representacao: )
+Token de número 52, linha 15, tag: 47 e representacao: /
+Erro lexico na linha 15: float mal formado '2.' (esperado digito apos o ponto)
+Token de número 53, linha 15, tag: 59 e representacao: ;
+Token de número 54, linha 16, tag: 277 e representacao: write
+Token de número 55, linha 16, tag: 40 e representacao: (
+Token de número 56, linha 16, tag: 281 e representacao: Resto da divisao: 
+Token de número 57, linha 16, tag: 41 e representacao: )
+Token de número 58, linha 16, tag: 59 e representacao: ;
+Token de número 59, linha 17, tag: 277 e representacao: write
+Token de número 60, linha 17, tag: 40 e representacao: (
+Token de número 61, linha 17, tag: 263 e representacao: a
+Token de número 62, linha 17, tag: 37 e representacao: %
+Token de número 63, linha 17, tag: 263 e representacao: b
+Token de número 64, linha 17, tag: 41 e representacao: )
+Token de número 65, linha 17, tag: 59 e representacao: ;
+Token de número 66, linha 18, tag: 276 e representacao: read
+Token de número 67, linha 18, tag: 40 e representacao: (
+Token de número 68, linha 18, tag: 263 e representacao: a
+Token de número 69, linha 18, tag: 41 e representacao: )
+Token de número 70, linha 18, tag: 59 e representacao: ;
+Token de número 71, linha 19, tag: 264 e representacao: if
+Token de número 72, linha 19, tag: 40 e representacao: (
+Token de número 73, linha 19, tag: 263 e representacao: a
+Token de número 74, linha 19, tag: 262 e representacao: >=
+Token de número 75, linha 19, tag: 263 e representacao: b
+Token de número 76, linha 19, tag: 41 e representacao: )
+Token de número 77, linha 19, tag: 268 e representacao: ||
+Token de número 78, linha 19, tag: 40 e representacao: (
+Token de número 79, linha 19, tag: 263 e representacao: a
+Token de número 80, linha 19, tag: 60 e representacao: <
+Token de número 81, linha 19, tag: 267 e representacao: 0.0
+Token de número 82, linha 19, tag: 41 e representacao: )
+Token de número 83, linha 19, tag: 278 e representacao: then
+Token de número 84, linha 20, tag: 263 e representacao: soma
+Token de número 85, linha 20, tag: 61 e representacao: =
+Token de número 86, linha 20, tag: 263 e representacao: a
+Token de número 87, linha 20, tag: 42 e representacao: *
+Token de número 88, linha 20, tag: 263 e representacao: b
+Token de número 89, linha 21, tag: 259 e representacao: else
+Token de número 90, linha 22, tag: 263 e representacao: soma
+Token de número 91, linha 22, tag: 61 e representacao: =
+Token de número 92, linha 22, tag: 45 e representacao: -
+Token de número 93, linha 22, tag: 263 e representacao: b
+Token de número 94, linha 23, tag: 275 e representacao: end
+Token de número 95, linha 23, tag: 59 e representacao: ;
+Token de número 96, linha 24, tag: 272 e representacao: while
+Token de número 97, linha 24, tag: 40 e representacao: (
+Token de número 98, linha 24, tag: 263 e representacao: a
+Token de número 99, linha 24, tag: 62 e representacao: >
+Token de número 100, linha 24, tag: 267 e representacao: 0.0
+Token de número 101, linha 24, tag: 41 e representacao: )
+Token de número 102, linha 24, tag: 256 e representacao: &&
+Token de número 103, linha 24, tag: 40 e representacao: (
+Token de número 104, linha 24, tag: 263 e representacao: a
+Token de número 105, linha 24, tag: 266 e representacao: !=
+Token de número 106, linha 24, tag: 263 e representacao: b
+Token de número 107, linha 24, tag: 41 e representacao: )
+Token de número 108, linha 24, tag: 258 e representacao: do
+Token de número 109, linha 25, tag: 263 e representacao: a
+Token de número 110, linha 25, tag: 61 e representacao: =
+Token de número 111, linha 25, tag: 263 e representacao: a
+Token de número 112, linha 25, tag: 45 e representacao: -
+Token de número 113, linha 25, tag: 267 e representacao: 1.0
+Token de número 114, linha 26, tag: 275 e representacao: end
+Token de número 115, linha 26, tag: 59 e representacao: ;
+Token de número 116, linha 27, tag: 279 e representacao: repeat
+Token de número 117, linha 28, tag: 263 e representacao: b
+Token de número 118, linha 28, tag: 61 e representacao: =
+Token de número 119, linha 28, tag: 263 e representacao: b
+Token de número 120, linha 28, tag: 45 e representacao: -
+Token de número 121, linha 28, tag: 267 e representacao: 1.0
+Token de número 122, linha 29, tag: 280 e representacao: until
+Token de número 123, linha 29, tag: 40 e representacao: (
+Token de número 124, linha 29, tag: 263 e representacao: b
+Token de número 125, linha 29, tag: 265 e representacao: <=
+Token de número 126, linha 29, tag: 267 e representacao: 0.0
+Token de número 127, linha 29, tag: 41 e representacao: )
+Token de número 128, linha 29, tag: 59 e representacao: ;
+Token de número 129, linha 30, tag: 264 e representacao: if
+Token de número 130, linha 30, tag: 33 e representacao: !
+Token de número 131, linha 30, tag: 40 e representacao: (
+Token de número 132, linha 30, tag: 263 e representacao: soma
+Token de número 133, linha 30, tag: 260 e representacao: ==
+Token de número 134, linha 30, tag: 267 e representacao: 0.0
+Token de número 135, linha 30, tag: 41 e representacao: )
+Token de número 136, linha 30, tag: 278 e representacao: then
+Token de número 137, linha 31, tag: 277 e representacao: write
+Token de número 138, linha 31, tag: 40 e representacao: (
+Token de número 139, linha 31, tag: 263 e representacao: media
+Token de número 140, linha 31, tag: 41 e representacao: )
+Token de número 141, linha 32, tag: 275 e representacao: end
+Token de número 142, linha 32, tag: 59 e representacao: ;
+Token de número 143, linha 33, tag: 277 e representacao: write
+Token de número 144, linha 33, tag: 40 e representacao: (
+Token de número 145, linha 33, tag: 263 e representacao: taxa
+Token de número 146, linha 33, tag: 41 e representacao: )
+Token de número 147, linha 34, tag: 275 e representacao: end
+Token de número 148, linha 34, tag: 46 e representacao: .
+
+Tabela de Simbolos:
+
+Lexema: int e tag: 257
+Lexema: end e tag: 275
+Lexema: until e tag: 280
+Lexema: teste6a e tag: 263
+Lexema: media e tag: 263
+Lexema: program e tag: 273
+Lexema: repeat e tag: 279
+Lexema: soma e tag: 263
+Lexema: if e tag: 264
+Lexema: letra e tag: 263
+Lexema: while e tag: 272
+Lexema: do e tag: 258
+Lexema: taxa e tag: 263
+Lexema: read e tag: 276
+Lexema: else e tag: 259
+Lexema: write e tag: 277
+Lexema: then e tag: 278
+Lexema: char e tag: 257
+Lexema: begin e tag: 274
+Lexema: b e tag: 263
+Lexema: a e tag: 263
+Lexema: float e tag: 257
+
+Resumo de erros lexicos:
+
+Erro lexico na linha 11: token invalido '3x' (identificador nao pode comecar com digito)
+Erro lexico na linha 15: float mal formado '2.' (esperado digito apos o ponto)

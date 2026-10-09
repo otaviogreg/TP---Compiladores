@@ -7,9 +7,12 @@
  * Autores: Otávio Andrade, Davi Braga e Hugo Daniel
  */
 
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.Reader;
+import java.nio.charset.StandardCharsets;
 import java.util.Hashtable;
 import java.util.ArrayList;
 import java.util.List;
@@ -31,7 +34,6 @@ class Tag {
         DO = 258,
         ELSE  = 259,
         EQ = 260,
-        FALSE = 261,
         GE = 262,
         ID = 263,
         IF = 264,
@@ -41,7 +43,6 @@ class Tag {
         OR = 268,
         REAL = 269,
         TEMP = 270,
-        TRUE = 271,
         WHILE = 272,
         PROGRAM = 273,
         BEGIN = 274,
@@ -101,8 +102,6 @@ class Word extends Token {
     public static final Word ne = new Word("!=", Tag.NE);
     public static final Word le = new Word("<=", Tag.LE);
     public static final Word ge = new Word(">=", Tag.GE);
-    public static final Word True = new Word("true", Tag.TRUE);
-    public static final Word False = new Word("false", Tag.FALSE);
 
     public Word(String s, int tag) {
         super(tag);
@@ -129,7 +128,7 @@ class Word extends Token {
 class Lexer {
     public static int line = 1;
     private char ch = ' ';
-    private FileReader file;
+    private Reader file;
     private Hashtable<String, Word> words = new Hashtable<String, Word>();
     private List<String> errors = new ArrayList<>();
 
@@ -159,22 +158,14 @@ class Lexer {
     }
 
     /**
-     * Inicializa a leitura do arquivo e reserva todas as palavras-chave da linguagem.
-     * 
+     * Inicializa a leitura do arquivo (sempre em UTF-8, independente do sistema) e reserva todas as palavras-chave da linguagem.
+     * Os operadores (&&, ||, ==, ...) não entram na Tabela de Símbolos: são devolvidos diretamente pelo scan().
+     *
      * @param fileName Caminho do arquivo de código fonte.
      * @throws FileNotFoundException Caso o arquivo informado não seja encontrado.
      */
     public Lexer(String fileName) throws FileNotFoundException {
-        file = new FileReader(fileName);
-
-        reserve(Word.and);
-        reserve(Word.or);
-        reserve(Word.eq);
-        reserve(Word.ne);
-        reserve(Word.le);
-        reserve(Word.ge);
-        reserve(Word.True);
-        reserve(Word.False);
+        file = new InputStreamReader(new FileInputStream(fileName), StandardCharsets.UTF_8);
 
         // Reserva das palavras-chave da linguagem
         reserve(new Word("if", Tag.IF));
@@ -237,7 +228,7 @@ class Lexer {
         // Ignora espaços em branco, tabulações, novas linhas e comentários
         for (;; readch()) {
 
-            if (ch == ' ' || ch == '\t' || ch == '\r') {
+            if (ch == ' ' || ch == '\t' || ch == '\r' || ch == '\uFEFF') { // '\uFEFF' = BOM de arquivos UTF-8
                 continue;
             } else if (ch == '\n') {
                 line++;
@@ -247,7 +238,8 @@ class Lexer {
                 
                 if (ch == '*') {
                     readch();
-                    
+                    boolean closed = false;
+
                     while (ch != Tag.EOF) {
                         if (ch == '\n') {
                             line++;
@@ -257,7 +249,7 @@ class Lexer {
                         if (ch == '*') {
                             readch();
                             if (ch == '}') {
-                                readch();
+                                closed = true; // O '}' é consumido pelo readch() do for, que também lê o caractere seguinte
                                 break;
                             } else continue; // Considera o asterisco como parte do comentário e continua a leitura
                         }
@@ -265,9 +257,12 @@ class Lexer {
                         readch();
                     }
                     
-                    if (ch == Tag.EOF) {
+                    if (!closed) {
                         reportError("Comentário não fechado");
                     }
+                } else {
+                    // '{' sem '*' não inicia comentário: é um símbolo comum. 'ch' já guarda o próximo caractere, que ainda será analisado
+                    return new Token('{');
                 }
             } else {
                 break;
@@ -427,6 +422,11 @@ class Lexer {
 public class lexicalAnalyzer {
 
     public static void main(String[] args) {
+
+        if (args.length != 1) {
+            System.err.println("Uso: java lexicalAnalyzer <arquivo-fonte>   (ou: java -jar TP1-Compiladores.jar <arquivo-fonte>)");
+            System.exit(1);
+        }
 
         String fileName = args[0]; // Primeiro argumento do CLI contendo o caminho do arquivo
 

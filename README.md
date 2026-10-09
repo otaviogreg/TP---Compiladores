@@ -14,10 +14,30 @@ O programa roda apenas por linha de comando e exige o arquivo com o código-font
 
 ```bash
 javac *.java
-java lexicalAnalyzer teste1.txt
+java lexicalAnalyzer testes_corrigidos/teste1_corrigido.txt
 ```
 
-A saída mostra, no terminal, a sequência de tokens identificados e, ao final, os registros da tabela de símbolos.
+Ou pelo JAR já compilado (Java 8 ou superior):
+
+```bash
+java -jar TP1-Compiladores.jar testes_corrigidos/teste1_corrigido.txt
+```
+
+Para gerar o JAR novamente:
+
+```bash
+javac --release 8 *.java
+jar cfe TP1-Compiladores.jar lexicalAnalyzer *.class
+```
+
+A saída mostra, no terminal, a sequência de tokens identificados, os registros da tabela de símbolos e o resumo dos erros léxicos.
+
+## Testes
+
+- `testes_originais/`: os programas de teste como foram propostos (`teste1_original.txt`, ...), com os erros léxicos.
+- `testes_corrigidos/`: os mesmos programas com os erros léxicos corrigidos (`teste1_corrigido.txt`, ...), que são usados nas próximas etapas.
+- `logs/`: saída completa do compilador para cada arquivo, com o mesmo nome (`teste1_original.txt`, `teste1_corrigido.txt`, ...).
+- Os testes 6a e 6b são os dois programas autorais pedidos no enunciado.
 
 ## Como funciona
 

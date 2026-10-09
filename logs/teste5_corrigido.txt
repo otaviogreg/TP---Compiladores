@@ -1,0 +1,146 @@
+Token de número 1, linha 3, tag: 273 e representacao: program
+Token de número 2, linha 3, tag: 263 e representacao: teste5
+Token de número 3, linha 4, tag: 263 e representacao: a
+Token de número 4, linha 4, tag: 44 e representacao: ,
+Token de número 5, linha 4, tag: 263 e representacao: b
+Token de número 6, linha 4, tag: 44 e representacao: ,
+Token de número 7, linha 4, tag: 263 e representacao: c
+Token de número 8, linha 4, tag: 44 e representacao: ,
+Token de número 9, linha 4, tag: 263 e representacao: maior
+Token de número 10, linha 4, tag: 58 e representacao: :
+Token de número 11, linha 4, tag: 257 e representacao: int
+Token de número 12, linha 4, tag: 59 e representacao: ;
+Token de número 13, linha 5, tag: 263 e representacao: opc
+Token de número 14, linha 5, tag: 58 e representacao: :
+Token de número 15, linha 5, tag: 257 e representacao: int
+Token de número 16, linha 5, tag: 59 e representacao: ;
+Token de número 17, linha 7, tag: 274 e representacao: begin
+Token de número 18, linha 8, tag: 279 e representacao: repeat
+Token de número 19, linha 9, tag: 277 e representacao: write
+Token de número 20, linha 9, tag: 40 e representacao: (
+Token de número 21, linha 9, tag: 281 e representacao: A: 
+Token de número 22, linha 9, tag: 41 e representacao: )
+Token de número 23, linha 9, tag: 59 e representacao: ;
+Token de número 24, linha 10, tag: 276 e representacao: read
+Token de número 25, linha 10, tag: 40 e representacao: (
+Token de número 26, linha 10, tag: 263 e representacao: a
+Token de número 27, linha 10, tag: 41 e representacao: )
+Token de número 28, linha 10, tag: 59 e representacao: ;
+Token de número 29, linha 11, tag: 277 e representacao: write
+Token de número 30, linha 11, tag: 40 e representacao: (
+Token de número 31, linha 11, tag: 281 e representacao: B: 
+Token de número 32, linha 11, tag: 41 e representacao: )
+Token de número 33, linha 11, tag: 59 e representacao: ;
+Token de número 34, linha 12, tag: 276 e representacao: read
+Token de número 35, linha 12, tag: 40 e representacao: (
+Token de número 36, linha 12, tag: 263 e representacao: b
+Token de número 37, linha 12, tag: 41 e representacao: )
+Token de número 38, linha 12, tag: 59 e representacao: ;
+Token de número 39, linha 13, tag: 277 e representacao: write
+Token de número 40, linha 13, tag: 40 e representacao: (
+Token de número 41, linha 13, tag: 281 e representacao: C: 
+Token de número 42, linha 13, tag: 41 e representacao: )
+Token de número 43, linha 13, tag: 59 e representacao: ;
+Token de número 44, linha 14, tag: 276 e representacao: read
+Token de número 45, linha 14, tag: 40 e representacao: (
+Token de número 46, linha 14, tag: 263 e representacao: c
+Token de número 47, linha 14, tag: 41 e representacao: )
+Token de número 48, linha 14, tag: 59 e representacao: ;
+Token de número 49, linha 18, tag: 264 e representacao: if
+Token de número 50, linha 18, tag: 40 e representacao: (
+Token de número 51, linha 18, tag: 40 e representacao: (
+Token de número 52, linha 18, tag: 263 e representacao: a
+Token de número 53, linha 18, tag: 62 e representacao: >
+Token de número 54, linha 18, tag: 263 e representacao: b
+Token de número 55, linha 18, tag: 41 e representacao: )
+Token de número 56, linha 18, tag: 256 e representacao: &&
+Token de número 57, linha 18, tag: 40 e representacao: (
+Token de número 58, linha 18, tag: 263 e representacao: a
+Token de número 59, linha 18, tag: 62 e representacao: >
+Token de número 60, linha 18, tag: 263 e representacao: c
+Token de número 61, linha 18, tag: 41 e representacao: )
+Token de número 62, linha 18, tag: 41 e representacao: )
+Token de número 63, linha 18, tag: 275 e representacao: end
+Token de número 64, linha 19, tag: 263 e representacao: maior
+Token de número 65, linha 19, tag: 61 e representacao: =
+Token de número 66, linha 19, tag: 263 e representacao: a
+Token de número 67, linha 21, tag: 259 e representacao: else
+Token de número 68, linha 22, tag: 264 e representacao: if
+Token de número 69, linha 22, tag: 40 e representacao: (
+Token de número 70, linha 22, tag: 263 e representacao: b
+Token de número 71, linha 22, tag: 62 e representacao: >
+Token de número 72, linha 22, tag: 263 e representacao: c
+Token de número 73, linha 22, tag: 41 e representacao: )
+Token de número 74, linha 22, tag: 278 e representacao: then
+Token de número 75, linha 23, tag: 263 e representacao: maior
+Token de número 76, linha 23, tag: 61 e representacao: =
+Token de número 77, linha 23, tag: 263 e representacao: b
+Token de número 78, linha 23, tag: 59 e representacao: ;
+Token de número 79, linha 25, tag: 259 e representacao: else
+Token de número 80, linha 26, tag: 263 e representacao: maior
+Token de número 81, linha 26, tag: 61 e representacao: =
+Token de número 82, linha 26, tag: 263 e representacao: c
+Token de número 83, linha 27, tag: 275 e representacao: end
+Token de número 84, linha 28, tag: 275 e representacao: end
+Token de número 85, linha 28, tag: 59 e representacao: ;
+Token de número 86, linha 29, tag: 277 e representacao: write
+Token de número 87, linha 29, tag: 40 e representacao: (
+Token de número 88, linha 29, tag: 281 e representacao: Maior valor: 
+Token de número 89, linha 29, tag: 41 e representacao: )
+Token de número 90, linha 29, tag: 59 e representacao: ;
+Token de número 91, linha 30, tag: 277 e representacao: write
+Token de número 92, linha 30, tag: 40 e representacao: (
+Token de número 93, linha 30, tag: 263 e representacao: maior
+Token de número 94, linha 30, tag: 41 e representacao: )
+Token de número 95, linha 30, tag: 59 e representacao: ;
+Token de número 96, linha 31, tag: 277 e representacao: write
+Token de número 97, linha 31, tag: 40 e representacao: (
+Token de número 98, linha 31, tag: 281 e representacao:  Continuar?(S/N) 
+Token de número 99, linha 31, tag: 41 e representacao: )
+Token de número 100, linha 31, tag: 59 e representacao: ;
+Token de número 101, linha 32, tag: 276 e representacao: read
+Token de número 102, linha 32, tag: 40 e representacao: (
+Token de número 103, linha 32, tag: 263 e representacao: outro
+Token de número 104, linha 32, tag: 41 e representacao: )
+Token de número 105, linha 32, tag: 59 e representacao: ;
+Token de número 106, linha 33, tag: 280 e representacao: until
+Token de número 107, linha 33, tag: 40 e representacao: (
+Token de número 108, linha 33, tag: 263 e representacao: opc
+Token de número 109, linha 33, tag: 260 e representacao: ==
+Token de número 110, linha 33, tag: 282 e representacao: N
+Token de número 111, linha 33, tag: 268 e representacao: ||
+Token de número 112, linha 33, tag: 263 e representacao: opc
+Token de número 113, linha 33, tag: 260 e representacao: ==
+Token de número 114, linha 33, tag: 282 e representacao: n
+Token de número 115, linha 33, tag: 41 e representacao: )
+Token de número 116, linha 34, tag: 275 e representacao: end
+Token de número 117, linha 34, tag: 46 e representacao: .
+
+Tabela de Simbolos:
+
+Lexema: int e tag: 257
+Lexema: teste5 e tag: 263
+Lexema: maior e tag: 263
+Lexema: end e tag: 275
+Lexema: until e tag: 280
+Lexema: program e tag: 273
+Lexema: opc e tag: 263
+Lexema: repeat e tag: 279
+Lexema: outro e tag: 263
+Lexema: if e tag: 264
+Lexema: while e tag: 272
+Lexema: do e tag: 258
+Lexema: read e tag: 276
+Lexema: else e tag: 259
+Lexema: write e tag: 277
+Lexema: then e tag: 278
+Lexema: char e tag: 257
+Lexema: c e tag: 263
+Lexema: begin e tag: 274
+Lexema: b e tag: 263
+Lexema: a e tag: 263
+Lexema: float e tag: 257
+
+Resumo de erros lexicos:
+
+Nenhum erro lexico encontrado. Analise lexica concluida com sucesso.

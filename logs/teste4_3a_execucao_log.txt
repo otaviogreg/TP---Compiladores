@@ -103,16 +103,22 @@ Token de número 102, linha 29, tag: 275 e representacao: end
 
 Tabela de Simbolos:
 
+Lexema: true e tag: 271
 Lexema: int e tag: 257
 Lexema: disponibilidade e tag: 263
+Lexema: false e tag: 261
+Lexema: <= e tag: 265
+Lexema: && e tag: 256
 Lexema: teste4 e tag: 263
-Lexema: end e tag: 275
 Lexema: until e tag: 280
+Lexema: end e tag: 275
 Lexema: inteiro e tag: 263
 Lexema: program e tag: 273
-Lexema: repeat e tag: 279
 Lexema: programa e tag: 263
+Lexema: repeat e tag: 279
+Lexema: == e tag: 260
 Lexema: pontuacao e tag: 263
+Lexema: || e tag: 268
 Lexema: if e tag: 264
 Lexema: while e tag: 272
 Lexema: pontuacaoMinima e tag: 263
@@ -120,10 +126,12 @@ Lexema: do e tag: 258
 Lexema: read e tag: 276
 Lexema: pontuacaoMaxima e tag: 263
 Lexema: else e tag: 259
+Lexema: >= e tag: 262
 Lexema: write e tag: 277
 Lexema: then e tag: 278
 Lexema: char e tag: 257
 Lexema: begin e tag: 274
+Lexema: != e tag: 266
 Lexema: float e tag: 257
 
 Resumo de erros lexicos:

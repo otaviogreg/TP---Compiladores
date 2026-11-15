@@ -14,8 +14,7 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.nio.charset.StandardCharsets;
 import java.util.Hashtable;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Locale;
 
 /**
  * Classificações de Tokens (Tags).
@@ -118,6 +117,20 @@ class Word extends Token {
     }
 }
 
+// Representa o primeiro erro encontrado pelo analisador lexico e guarda a linha para que o programa possa exibir o diagnostico e interromper a analise sem acumular erros posteriores.
+class LexicalException extends Exception {
+    private final int line;
+
+    public LexicalException(int line, String message) {
+        super(message);
+        this.line = line;
+    }
+
+    public int getLine() {
+        return line;
+    }
+}
+
 /**
  * Classe principal do analisador léxico
  * 
@@ -130,7 +143,6 @@ class Lexer {
     private char ch = ' ';
     private Reader file;
     private Hashtable<String, Word> words = new Hashtable<String, Word>();
-    private List<String> errors = new ArrayList<>();
 
     /**
      * Associa uma palavra reservada ou token à Tabela de Símbolos.
@@ -139,10 +151,9 @@ class Lexer {
         words.put(w.getLexeme(), w);
     }
 
-    private void reportError(String msg) {
-        String full = "Erro lexico na linha " + line + ": " + msg;
-        errors.add(full);
-        System.err.println(full);
+    // Um dos requisitos pedidos é a exibição do primeiro erro, apenas. Modificamos para atender ao enunciado.
+    private void reportError(String msg) throws LexicalException {
+        throw new LexicalException(line, msg);
     }
 
     private boolean isLetter(char c) {
@@ -151,10 +162,6 @@ class Lexer {
 
     private boolean isDigit(char c) {
         return c >= '0' && c <= '9';
-    }
-
-    public List<String> getErrors() {
-        return errors;
     }
 
     /**
@@ -224,7 +231,7 @@ class Lexer {
      * @return Próximo Token reconhecido, na etapa 2 do TP será utilizado para enviar valores ao analisador sintático
      * @throws IOException
      */
-    public Token scan() throws IOException {
+    public Token scan() throws IOException, LexicalException {
         // Ignora espaços em branco, tabulações, novas linhas e comentários
         for (;; readch()) {
 
@@ -342,7 +349,8 @@ class Lexer {
                 readch();
             } while (isLetter(ch) || isDigit(ch) || ch == '_');
 
-            String s = sb.toString();
+            // Modificação da linguagem para não ser case sesitive. Modificação feita como correção da parte 1 na parte 2.
+            String s = sb.toString().toLowerCase(Locale.ROOT);
             Word w = words.get(s);
 
             // Se a palavra já estiver na TS, retorna ela mesma
@@ -433,33 +441,14 @@ public class lexicalAnalyzer {
         try {
             Lexer lexer = new Lexer(fileName);
 
-            Token t;
-            int tokenCount = 0;
-
-            // Executa a análise token por token até o fim do arquivo
-            while ((t = lexer.scan()) != null) {
-                tokenCount++;
-                System.out.println("Token de número " + tokenCount + ", linha " + Lexer.line + ", tag: " + t.tag + " e representacao: " + t.toString());
+            // Executa a análise léxica até o fim do arquivo, ignorando os tokens retornados. O objetivo é apenas validar o código fonte e gerar erros léxicos caso existam.
+            while (lexer.scan() != null) {
             }
 
-            // Exibição da Tabela de Símbolos para verificação dos valores inseridos pelo analisador léxico
-            System.out.println("\nTabela de Simbolos:\n");
-
-            Hashtable<String, Word> table = lexer.getWords();
-
-            for (String key : table.keySet()) {
-                Word tableWord = table.get(key);
-                System.out.println("Lexema: " + tableWord.getLexeme() + " e tag: " + tableWord.tag);
-            }
-
-            System.out.println("\nResumo de erros lexicos:\n");
-            if (lexer.getErrors().isEmpty()) {
-                System.out.println("Nenhum erro lexico encontrado. Analise lexica concluida com sucesso.");
-            } else {
-                for (String e : lexer.getErrors()) {
-                    System.out.println(e);
-                }
-            }
+            System.out.println("Analise concluida com sucesso.");
+        } catch (LexicalException e) {
+            System.err.println("Erro lexico na linha " + e.getLine() + ": " + e.getMessage());
+            System.exit(1);
         } catch (FileNotFoundException e) {
             System.err.println("Arquivo nao encontrado. Erro: " + e.getMessage());
         } catch (IOException e) {

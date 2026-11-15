@@ -14,7 +14,6 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.nio.charset.StandardCharsets;
 import java.util.Hashtable;
-import java.util.Locale;
 
 /**
  * Classificações de Tokens (Tags).
@@ -349,8 +348,8 @@ class Lexer {
                 readch();
             } while (isLetter(ch) || isDigit(ch) || ch == '_');
 
-            // Modificação da linguagem para não ser case sesitive. Modificação feita como correção da parte 1 na parte 2.
-            String s = sb.toString().toLowerCase(Locale.ROOT);
+            // Corrigimos o commit anterior para voltar o case-sensitive. Estávamos olhando a especificação do trabalho de 2026-1 =)
+            String s = sb.toString();
             Word w = words.get(s);
 
             // Se a palavra já estiver na TS, retorna ela mesma

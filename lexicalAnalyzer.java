@@ -71,13 +71,14 @@ class Token {
 }
 
 /**
- * Token especializado para números (trabalhando apenas com double pelas especificações técnicas passadas no TP)
+ * Token especializado para números.
  */
 class Num extends Token {
     public final double floatValue;
 
-    public Num(double floatValue) {
-        super(Tag.NUM);
+    // O tipo número possui a mesma especificação de classe para números inteiros e reais. A diferenciação é feita pelo envio da tag para o construtor.
+    public Num(double floatValue, int tag) {
+        super(tag);
         this.floatValue = floatValue;
     }
 
@@ -295,6 +296,7 @@ class Lexer {
         if (isDigit(ch)) {
             StringBuilder sb = new StringBuilder();
             boolean erro = false;
+            boolean isReal = false;
 
             // Parte inteira
             do {
@@ -304,6 +306,7 @@ class Lexer {
 
             // Parte decimal: float_const ::= digit+ "." digit+
             if (ch == '.') {
+                isReal = true;
                 sb.append(ch);
                 readch(); // consome o ponto
 
@@ -335,7 +338,7 @@ class Lexer {
                 return scan();
             }
 
-            return new Num(Double.parseDouble(sb.toString()));
+            return new Num(Double.parseDouble(sb.toString()), isReal ? Tag.REAL : Tag.NUM);
         }
 
         // Reconhecimento de Identificadores e Palavras Reservadas

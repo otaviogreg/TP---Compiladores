@@ -1,0 +1,6 @@
+*.class
+*.jar
+
+/testes_corrigidos/
+/testes_originais/
+/logs/

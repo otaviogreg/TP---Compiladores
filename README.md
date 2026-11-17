@@ -14,7 +14,7 @@ O programa roda apenas por linha de comando e exige o arquivo com o código-font
 
 ```bash
 javac *.java
-java lexicalAnalyzer testes_corrigidos/teste1_corrigido.txt
+java Compiler testes_corrigidos/teste1_corrigido.txt
 ```
 
 Ou pelo JAR já compilado (Java 8 ou superior):
@@ -27,10 +27,10 @@ Para gerar o JAR novamente:
 
 ```bash
 javac --release 8 *.java
-jar cfe TP1-Compiladores.jar lexicalAnalyzer *.class
+jar cfe TP1-Compiladores.jar Compiler *.class
 ```
 
-A saída mostra, no terminal, a sequência de tokens identificados, os registros da tabela de símbolos e o resumo dos erros léxicos.
+O ponto de entrada do compilador é `Compiler`. A classe instancia os analisadores léxico e sintático separadamente; o encaminhamento dos tokens será conectado quando o analisador sintático tiver seu método de entrada.
 
 ## Testes
 

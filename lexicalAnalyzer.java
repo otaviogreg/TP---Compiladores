@@ -138,7 +138,7 @@ class LexicalException extends Exception {
  * ignorar espaços e comentários, gerenciar a contagem de linhas e converter
  * os lexemas encontrados em Tokens estruturados (Token, Num, Word)
  */
-class Lexer {
+public class LexicalAnalyzer {
     public static int line = 1;
     private char ch = ' ';
     private Reader file;
@@ -171,7 +171,7 @@ class Lexer {
      * @param fileName Caminho do arquivo de código fonte.
      * @throws FileNotFoundException Caso o arquivo informado não seja encontrado.
      */
-    public Lexer(String fileName) throws FileNotFoundException {
+    public LexicalAnalyzer(String fileName) throws FileNotFoundException {
         file = new InputStreamReader(new FileInputStream(fileName), StandardCharsets.UTF_8);
 
         // Reserva das palavras-chave da linguagem
@@ -423,38 +423,5 @@ class Lexer {
      */
     public Hashtable<String, Word> getWords() {
         return words;
-    }
-}
-
-/**
- * Classe principal para execução e teste do Analisador Léxico.
- */
-public class lexicalAnalyzer {
-
-    public static void main(String[] args) {
-
-        if (args.length != 1) {
-            System.err.println("Uso: java lexicalAnalyzer <arquivo-fonte>   (ou: java -jar TP1-Compiladores.jar <arquivo-fonte>)");
-            System.exit(1);
-        }
-
-        String fileName = args[0]; // Primeiro argumento do CLI contendo o caminho do arquivo
-
-        try {
-            Lexer lexer = new Lexer(fileName);
-
-            // Executa a análise léxica até o fim do arquivo, ignorando os tokens retornados. O objetivo é apenas validar o código fonte e gerar erros léxicos caso existam.
-            while (lexer.scan() != null) {
-            }
-
-            System.out.println("Analise concluida com sucesso.");
-        } catch (LexicalException e) {
-            System.err.println("Erro lexico na linha " + e.getLine() + ": " + e.getMessage());
-            System.exit(1);
-        } catch (FileNotFoundException e) {
-            System.err.println("Arquivo nao encontrado. Erro: " + e.getMessage());
-        } catch (IOException e) {
-            System.err.println("Erro de leitura no arquivo. Erro: " + e.getMessage());
-        }
     }
 }

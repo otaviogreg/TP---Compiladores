@@ -138,7 +138,7 @@ class LexicalException extends Exception {
  * ignorar espaços e comentários, gerenciar a contagem de linhas e converter
  * os lexemas encontrados em Tokens estruturados (Token, Num, Word)
  */
-public class LexicalAnalyzer {
+public class LexicalAnalyzer implements AutoCloseable {
     public static int line = 1;
     private char ch = ' ';
     private Reader file;
@@ -423,5 +423,11 @@ public class LexicalAnalyzer {
      */
     public Hashtable<String, Word> getWords() {
         return words;
+    }
+
+    // LER: Compiler fecha o analisador ao terminar a analise para liberar o arquivo-fonte, inclusive se o lexer ou o parser lancar um erro.
+    @Override
+    public void close() throws IOException {
+        file.close();
     }
 }

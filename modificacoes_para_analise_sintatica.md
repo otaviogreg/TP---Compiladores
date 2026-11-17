@@ -2,8 +2,8 @@
 
 ## Decisões de arquitetura
 
-- A classe `Compiler`, em `Compiler.java`, é o ponto de entrada do compilador e contém a `main` global. Ela recebe o caminho do programa-fonte e instancia os analisadores léxico e sintático separadamente. O encaminhamento dos tokens será conectado quando o parser tiver um método de entrada; a análise semântica poderá ser integrada posteriormente.
-- O analisador léxico é a classe `LexicalAnalyzer`, em `LexicalAnalyzer.java`, e produz um token por chamada a `scan()`.
+- A classe `Compiler`, em `Compiler.java`, é o ponto de entrada do compilador e contém a `main` global. Ela recebe o caminho do programa-fonte, instancia os analisadores léxico e sintático separadamente e passa o lexer ao parser, que consome os tokens sob demanda. A análise semântica poderá ser integrada posteriormente.
+- O analisador léxico é a classe `LexicalAnalyzer`, em `LexicalAnalyzer.java`, e produz um token por chamada a `scan()`. O recurso do arquivo-fonte é fechado pelo `Compiler` ao fim da análise.
 - O analisador sintático será implementado como LR(1). A gramática terá uma produção aumentada `S' → Program`; seus itens carregam lookahead, que deve ser considerado na comparação de núcleos de estados.
 - A comparação de núcleos de estados considera lado esquerdo, lado direito e lookahead de cada item, pois lookaheads diferentes representam itens LR(1) diferentes.
 

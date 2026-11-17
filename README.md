@@ -30,7 +30,7 @@ javac --release 8 *.java
 jar cfe TP1-Compiladores.jar Compiler *.class
 ```
 
-O ponto de entrada do compilador é `Compiler`. A classe instancia os analisadores léxico e sintático separadamente; o encaminhamento dos tokens será conectado quando o analisador sintático tiver seu método de entrada.
+O ponto de entrada do compilador é `Compiler`. Ele instancia os analisadores léxico e sintático separadamente, e o analisador sintático consome os tokens sob demanda do lexer. A saída informa sucesso sintático ou o primeiro erro léxico/sintático com a linha correspondente. A análise semântica ainda não está implementada.
 
 ## Testes
 

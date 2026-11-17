@@ -7,10 +7,18 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-// A excecao sintatica guarda a linha e a mensagem do erro (assim como pedido), separadamente da excecao lexica. Mantivemos os mesmos moldes para fins de padronização
+/**
+ * Erro sintatico associado a linha do token inesperado.
+ */
 class SyntacticException extends Exception {
     private int line;
 
+    /**
+     * Cria um erro sintatico com sua linha e mensagem.
+     *
+     * @param line linha em que o erro foi detectado
+     * @param message descricao do erro
+     */
     public SyntacticException(int line, String message) {
         super(message);
         this.line = line;
@@ -21,21 +29,34 @@ class SyntacticException extends Exception {
     }
 }
 
+/**
+ * Analisador sintatico LR(1) canonico.
+ *
+ * Construi o automato de estados e as tabelas ACTION/GOTO a partir da gramatica.
+ * Durante a analise, consome os tokens fornecidos pelo analisador lexico.
+ */
 public class SyntacticAnalyzer {
+    /** Indica se a ultima entrada analisada foi aceita. */
     private boolean accepted;
+
+    /** Proximo numero global a ser atribuido a um estado novo. */
     private static int nextStateNumber;
+
     private State initialState;
     private List<State> states;
     private Map<Integer, Map<String, ParserTableEntry>> actionTable;
     private Map<Integer, Map<String, Integer>> gotoTable;
 
-    // Implementação global da gramática para uso pelo algoritmo de reconhecimento LR(1).
+    /** Gramatica compartilhada para construir os estados e as tabelas LR(1). */
     private static final Grammar GRAMMAR = createGrammar();
 
     public boolean isAccepted() {
         return accepted;
     }
 
+    /**
+     * Inicializa as colecoes e constroi o estado inicial, o automato e as tabelas.
+     */
     public SyntacticAnalyzer() {
         states = new ArrayList<>();
         actionTable = new LinkedHashMap<>();
@@ -45,11 +66,19 @@ public class SyntacticAnalyzer {
         buildParserTable();
     }
 
+    /**
+     * Define as producoes da linguagem e calcula os conjuntos FIRST necessarios
+     * para os fechamentos LR(1).
+     *
+     * @return gramatica completa, incluindo a producao aumentada
+     */
     private static Grammar createGrammar() {
         Grammar grammar = new Grammar();
 
         grammar.add("S'", "Program");
         grammar.add("Program", "program", "identifier", "begin", "DeclListOpt", "StmtList", "end", ".");
+
+        // Declaracoes e tipos.
         grammar.add("DeclListOpt", "DeclList");
         grammar.add("DeclListOpt");
         grammar.add("DeclList", "Decl", ";");
@@ -60,6 +89,8 @@ public class SyntacticAnalyzer {
         grammar.add("Type", "int");
         grammar.add("Type", "float");
         grammar.add("Type", "char");
+
+        // Listas de comandos e comandos da linguagem.
         grammar.add("StmtList", "Stmt");
         grammar.add("StmtList", "StmtList", ";", "Stmt");
         grammar.add("Stmt", "AssignStmt");
@@ -80,6 +111,8 @@ public class SyntacticAnalyzer {
         grammar.add("WriteStmt", "write", "(", "Writable", ")");
         grammar.add("Writable", "SimpleExpr");
         grammar.add("Writable", "literal");
+
+        // Expressoes e operadores.
         grammar.add("Expression", "SimpleExpr");
         grammar.add("Expression", "SimpleExpr", "Relop", "SimpleExpr");
         grammar.add("SimpleExpr", "Term");
@@ -113,12 +146,23 @@ public class SyntacticAnalyzer {
         return grammar;
     }
 
+    /**
+     * Cria o estado inicial a partir do item aumentado S' -> . Program, $.
+     *
+     * @return estado inicial com seu fechamento LR(1)
+     */
     private State createInitialState() {
         List<LR1Line> initialProductions = new ArrayList<>();
         initialProductions.add(new LR1Line("S'", "$", "<DOT>", "Program"));
         return createState(initialProductions);
     }
 
+    /**
+     * Cria um estado e calcula seu fechamento.
+     *
+     * @param productions itens-semente do estado
+     * @return novo estado LR(1)
+     */
     public State createState(List<LR1Line> productions) {
         return new State(productions);
     }
@@ -131,7 +175,10 @@ public class SyntacticAnalyzer {
         return states;
     }
 
-    // O grafo LR(1) e montado antes de ler a entrada. Para cada simbolo apos o ponto, avancamos o ponto nos itens correspondentes, comparamos o kernel incluindo lookaheads e criamos um estado somente quando ainda nao existe um equivalente.
+    /**
+     * Gera o automato percorrendo cada estado e cada simbolo que sucede seu ponto.
+     * Estados com o mesmo kernel, incluindo lookaheads, sao reutilizados.
+     */
     private void buildStateGraph() {
         states.add(initialState);
 
@@ -158,6 +205,10 @@ public class SyntacticAnalyzer {
         }
     }
 
+    /**
+     * Aplica GOTO ao estado para o simbolo, avancando o ponto dos itens
+     * correspondentes e preservando seus lookaheads.
+     */
     private List<LR1Line> moveDot(State state, String symbol) {
         List<LR1Line> movedItems = new ArrayList<>();
         for (LR1Line item : state.productions) {
@@ -174,6 +225,12 @@ public class SyntacticAnalyzer {
         return movedItems;
     }
 
+    /**
+     * Localiza um estado existente cujo kernel e igual ao recebido.
+     *
+     * @param kernel itens que formam o kernel candidato
+     * @return estado equivalente ou {@code null} quando ainda nao existe
+     */
     private State findStateWithKernel(List<LR1Line> kernel) {
         for (State state : states) {
             if (state.hasSameKernel(kernel)) {
@@ -183,7 +240,10 @@ public class SyntacticAnalyzer {
         return null;
     }
 
-    // ACTION escolhe shift, reduce ou accept usando o estado e o terminal de lookahead; GOTO leva ao estado seguinte depois de uma reducao por nao terminal.
+    /**
+     * Preenche ACTION com shifts e reducoes por lookahead, e GOTO com as
+     * transicoes por nao terminais.
+     */
     private void buildParserTable() {
         for (State state : states) {
             actionTable.put(state.number, new LinkedHashMap<>());
@@ -220,6 +280,9 @@ public class SyntacticAnalyzer {
         }
     }
 
+    /**
+     * Insere uma acao e rejeita conflitos shift/reduce ou reduce/reduce.
+     */
     private void putAction(int stateNumber, String terminal, ParserTableEntry action) {
         Map<String, ParserTableEntry> row = actionTable.get(stateNumber);
         ParserTableEntry existing = row.get(terminal);
@@ -231,7 +294,17 @@ public class SyntacticAnalyzer {
         row.put(terminal, action);
     }
 
-    // O parser consulta ACTION com o estado atual e o proximo token; shift consome o token, reduce troca os estados conforme a producao e GOTO, e accept marca a entrada como reconhecida.
+    /**
+     * Analisa os tokens usando a pilha de estados e as tabelas LR(1).
+     *
+     * Em shift, consome o lookahead; em reduce, remove os estados da parte
+     * direita da producao e consulta GOTO; em accept, marca a entrada aceita.
+     *
+     * @param lexer analisador lexico que fornece os tokens
+     * @throws java.io.IOException se ocorrer um erro de leitura
+     * @throws LexicalException se o lexer detectar um erro
+     * @throws SyntacticException se nao houver acao para o estado e lookahead
+     */
     public void runSyntacticAnalysis(LexicalAnalyzer lexer)
         throws java.io.IOException, LexicalException, SyntacticException {
         accepted = false;
@@ -279,6 +352,12 @@ public class SyntacticAnalyzer {
         }
     }
 
+    /**
+     * Converte a tag do lexer para o nome do terminal usado na gramatica.
+     *
+     * @param token token atual, ou {@code null} para o fim da entrada
+     * @return terminal correspondente na gramatica
+     */
     private String getTerminal(Token token) {
         if (token == null) {
             return "$";
@@ -319,17 +398,31 @@ public class SyntacticAnalyzer {
         throw new IllegalArgumentException("Token sem terminal da gramatica: " + token.tag);
     }
 
+    /**
+     * Item LR(1), composto por lado esquerdo, lado direito com marcador de ponto
+     * e simbolo de lookahead.
+     */
     public class LR1Line {
         private String left;
         private List<String> right;
         private String lookahead;
 
+        /**
+         * Cria um item a partir dos simbolos do lado direito.
+         *
+         * @param left nao terminal do lado esquerdo
+         * @param lookahead terminal de antecipacao
+         * @param right simbolos do lado direito, incluindo o marcador de ponto
+         */
         public LR1Line(String left, String lookahead, String... right) {
             this.left = left;
             this.right = new ArrayList<>(Arrays.asList(right));
             this.lookahead = lookahead;
         }
 
+        /**
+         * Cria um item usando uma lista de simbolos ja montada.
+         */
         private LR1Line(String left, String lookahead, List<String> right) {
             this.left = left;
             this.right = new ArrayList<>(right);
@@ -349,12 +442,18 @@ public class SyntacticAnalyzer {
         }
     }
 
+    /**
+     * Estado do automato LR(1), com kernel, fechamento, numero e transicoes.
+     */
     public class State {
         private ArrayList<LR1Line> initialProductions;
         private ArrayList<LR1Line> productions;
         private int number;
         private Map<String, State> transitions;
 
+        /**
+         * Cria um estado numerado e calcula seu fechamento a partir do kernel.
+         */
         private State(List<LR1Line> initialProductions) {
             number = nextStateNumber++;
             this.initialProductions = new ArrayList<>();
@@ -382,7 +481,12 @@ public class SyntacticAnalyzer {
             return transitions;
         }
 
-        // Função de comparação do núcleo do estado para evitar criar dois estados com as mesmas produções iniciais.
+        /**
+         * Compara kernels, incluindo lookahead, para identificar estados iguais.
+         *
+         * @param candidateKernel kernel candidato
+         * @return {@code true} se os conjuntos de itens forem iguais
+         */
         public boolean hasSameKernel(List<LR1Line> candidateKernel) {
             if (candidateKernel == null) {
                 return false;
@@ -407,6 +511,10 @@ public class SyntacticAnalyzer {
             return true;
         }
 
+        /**
+         * Inclui itens exigidos pela gramatica para cada nao terminal apos o ponto.
+         * O processo percorre tambem os itens novos ate o fechamento estabilizar.
+         */
         private void computeClosure() {
             for (int i = 0; i < productions.size(); i++) {
                 LR1Line item = productions.get(i);
@@ -439,6 +547,7 @@ public class SyntacticAnalyzer {
             }
         }
 
+        /** Adiciona o item-semente ao kernel e ao conjunto completo, sem duplicatas. */
         private void addInitialProduction(LR1Line candidate) {
             if (!containsItem(initialProductions, candidate)) {
                 initialProductions.add(candidate);
@@ -446,12 +555,14 @@ public class SyntacticAnalyzer {
             }
         }
 
+        /** Adiciona um item ao conjunto completo se ainda nao estiver presente. */
         private void addIfMissing(LR1Line candidate) {
             if (!containsItem(productions, candidate)) {
                 productions.add(candidate);
             }
         }
 
+        /** Compara todos os componentes de dois itens LR(1). */
         private boolean containsItem(List<LR1Line> items, LR1Line candidate) {
             for (LR1Line existing : items) {
                 if (existing.left.equals(candidate.left)
@@ -464,6 +575,9 @@ public class SyntacticAnalyzer {
         }
     }
 
+    /**
+     * Producoes da linguagem e informacoes FIRST usadas para calcular fechamentos.
+     */
     private static final class Grammar {
         private List<Production> productions = new ArrayList<>();
         private Map<String, Set<String>> firstSets = new LinkedHashMap<>();
@@ -473,6 +587,9 @@ public class SyntacticAnalyzer {
             productions.add(new Production(left, right));
         }
 
+        /**
+         * Calcula iterativamente FIRST e identifica nao terminais anulaveis.
+         */
         private void computeFirstSets() {
             for (Production production : productions) {
                 firstSets.putIfAbsent(production.left, new LinkedHashSet<>());
@@ -535,6 +652,10 @@ public class SyntacticAnalyzer {
             throw new IllegalArgumentException("Producao nao encontrada para o item " + item.left);
         }
 
+        /**
+         * Calcula FIRST da sequencia e inclui o lookahead final se toda a
+         * sequencia puder derivar vazio.
+         */
         private Set<String> firstOfSequence(List<String> sequence, String trailingLookahead) {
             Set<String> result = new LinkedHashSet<>();
             boolean allNullable = true;
@@ -560,6 +681,7 @@ public class SyntacticAnalyzer {
         }
     }
 
+    /** Producao da gramatica, representada por lado esquerdo e lado direito. */
     private static class Production {
         private String left;
         private List<String> right;
@@ -570,6 +692,7 @@ public class SyntacticAnalyzer {
         }
     }
 
+    /** Operacao armazenada em uma celula da tabela ACTION. */
     private static class ParserTableEntry {
         private String operation;
         private int value;

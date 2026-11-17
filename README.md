@@ -1,50 +1,52 @@
-# Compilador em Java — Etapa 1: Análise Léxica e Tabela de Símbolos
+# Compilador em Java
 
-Trabalho prático da disciplina de Compiladores. Esta etapa implementa as duas fases iniciais da compilação: o **analisador léxico** e a **tabela de símbolos**, em Java, com modelagem orientada a objetos.
+Trabalho prático da disciplina de Compiladores. O projeto realiza a análise léxica e a análise sintática do programa-fonte em um único fluxo, coordenado pela classe `Compiler`. A análise semântica ainda não está implementada.
 
-> Detalhes completos da implementação e dos testes estão no relatório da etapa.
+> Detalhes completos da implementação e dos testes estão no relatório do trabalho.
 
 ## Requisitos
 
-- JDK (Java Development Kit) instalado
+- JDK 8 ou superior instalado.
 
 ## Como usar
 
-O programa roda apenas por linha de comando e exige o arquivo com o código-fonte como parâmetro:
+O compilador é executado pela linha de comando e recebe o caminho do programa-fonte como argumento:
 
 ```bash
 javac *.java
 java Compiler testes_corrigidos/teste1_corrigido.txt
 ```
 
-Ou pelo JAR já compilado (Java 8 ou superior):
+Também é possível executar o JAR, se ele estiver disponível:
 
 ```bash
 java -jar TP1-Compiladores.jar testes_corrigidos/teste1_corrigido.txt
 ```
 
-Para gerar o JAR novamente:
+Para compilar as classes e gerar o JAR:
 
 ```bash
 javac --release 8 *.java
 jar cfe TP1-Compiladores.jar Compiler *.class
 ```
 
-O ponto de entrada do compilador é `Compiler`. Ele instancia os analisadores léxico e sintático separadamente, e o analisador sintático consome os tokens sob demanda do lexer. A saída informa sucesso sintático ou o primeiro erro léxico/sintático com a linha correspondente. A análise semântica ainda não está implementada.
-
-## Testes
-
-- `testes_originais/`: os programas de teste como foram propostos (`teste1_original.txt`, ...), com os erros léxicos.
-- `testes_corrigidos/`: os mesmos programas com os erros léxicos corrigidos (`teste1_corrigido.txt`, ...), que são usados nas próximas etapas.
-- `logs/`: saída completa do compilador para cada arquivo, com o mesmo nome (`teste1_original.txt`, `teste1_corrigido.txt`, ...).
-- Os testes 6a e 6b são os dois programas autorais pedidos no enunciado.
+O programa informa sucesso quando a análise sintática aceita a entrada. Se encontrar um erro léxico ou sintático, exibe o primeiro erro e sua linha.
 
 ## Como funciona
 
-- Lê o arquivo caractere por caractere, descartando espaços, tabulações, quebras de linha e comentários válidos.
-- Agrupa os caracteres em lexemas, valida-os contra os padrões léxicos e gera o token correspondente.
-- A **tabela de símbolos** usa `Hashtable` e é pré-carregada com as palavras reservadas (`program`, `begin`, `if`, `while`, `int`, `float`, etc.).
-- Ao reconhecer um identificador, o analisador consulta a tabela: se já existir, retorna o token mapeado; se não, insere uma nova entrada.
+- `Compiler` contém a `main`, recebe o caminho do arquivo e coordena as etapas da compilação.
+- `LexicalAnalyzer` lê o código-fonte, reconhece lexemas e fornece tokens sob demanda ao analisador sintático. A lista de tokens não é impressa durante a execução.
+- `SyntacticAnalyzer` usa uma gramática LR(1) aumentada com `S' → Program`. Os itens LR(1) incluem lookahead, que é considerado na comparação dos núcleos dos estados.
+- Antes de analisar a entrada, o analisador sintático constrói os estados e suas transições, calcula os fechamentos e monta as tabelas `ACTION` e `GOTO`.
+- Durante a análise, `ACTION` determina operações de shift, reduce e accept; `GOTO` determina a transição após uma redução. O parser consome os tokens do lexer até aceitar o programa ou encontrar o primeiro erro sintático.
+- A análise semântica, como verificação de declarações e compatibilidade de tipos, ainda não está implementada.
+
+## Testes
+
+- `testes_originais/`: programas de teste na forma original (`teste1_original.txt`, ...).
+- `testes_corrigidos/`: versões corrigidas dos programas de teste (`teste1_corrigido.txt`, ...).
+- `logs/`: saídas registradas para os arquivos de teste.
+- Os testes 6a e 6b são os dois programas autorais pedidos no enunciado.
 
 ## Autores
 

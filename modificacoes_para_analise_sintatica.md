@@ -1,17 +1,16 @@
-# Modificações para a análise sintática
+# Modificações no analisador léxico para o funcionamento correto da análise sintática
 
 ## Decisões de arquitetura
 
-- A classe `Compiler`, em `Compiler.java`, é o ponto de entrada do compilador e contém a `main` global. Ela recebe o caminho do programa-fonte, instancia os analisadores léxico e sintático separadamente e passa o lexer ao parser, que consome os tokens sob demanda. A análise semântica poderá ser integrada posteriormente.
-- O analisador léxico é a classe `LexicalAnalyzer`, em `LexicalAnalyzer.java`, e produz um token por chamada a `scan()`. O recurso do arquivo-fonte é fechado pelo `Compiler` ao fim da análise.
-- O analisador sintático será implementado como LR(1). A gramática terá uma produção aumentada `S' → Program`; seus itens carregam lookahead, que deve ser considerado na comparação de núcleos de estados.
-- A comparação de núcleos de estados considera lado esquerdo, lado direito e lookahead de cada item, pois lookaheads diferentes representam itens LR(1) diferentes.
+- Foi criada a classe `Compiler`, em `Compiler.java`, como ponto de entrada do compilador. Ela recebe o caminho do programa-fonte, instancia o analisador léxico e o sintático, e coordena o fluxo de tokens entre eles.
+- A `main`, antes contida em `LexicalAnalyzer`, foi movida para `Compiler`. A classe `LexicalAnalyzer` ficou responsável pelo reconhecimento e fornecimento de tokens.
+- O analisador sintático usa a gramática LR(1) aumentada com `S' → Program`. Os itens incluem lookahead, que é considerado na comparação dos núcleos dos estados.
+- Antes da análise da entrada, o analisador sintático constrói os estados e suas transições, calcula os fechamentos e monta as tabelas `ACTION` e `GOTO`.
+- O parser consome os tokens sob demanda do lexer. A análise semântica poderá ser integrada posteriormente.
 
-## Ajustes lexicais necessários à integração
+## Modificações no analisador léxico
 
-- Inteiros (`integer_const`) e reais (`float_const`) produzem tokens distintos: `Tag.NUM` e `Tag.REAL`, respectivamente.
-- A linguagem é case-sensitive; lexemas são consultados e armazenados preservando a caixa original.
-- Comentários começam com `{*` e terminam com `*}`; podem ocupar mais de uma linha.
+- Inteiros (`integer_const`) e reais (`float_const`) passaram a produzir tokens distintos: `Tag.NUM` e `Tag.REAL`, respectivamente.
 - Erros léxicos interrompem a análise no primeiro erro e informam a linha de ocorrência.
-- A sequência de tokens não é mais impressa na saída; os tokens são produzidos para consumo pelas etapas seguintes.
-- A classe e o arquivo do analisador léxico foram renomeados para `LexicalAnalyzer`.
+- A sequência de tokens reconhecidos deixou de ser impressa na saída; os tokens são fornecidos ao analisador sintático.
+- A classe e o arquivo do analisador léxico foram renomeados para `LexicalAnalyzer` e `LexicalAnalyzer.java`.

@@ -16,7 +16,7 @@ class SyntacticException extends Exception {
     /**
      * Cria um erro sintatico com sua linha e mensagem.
      *
-     * @param line linha em que o erro foi detectado
+     * @param line    linha em que o erro foi detectado
      * @param message descricao do erro
      */
     public SyntacticException(int line, String message) {
@@ -32,7 +32,8 @@ class SyntacticException extends Exception {
 /**
  * Analisador sintatico LR(1) canonico.
  *
- * Construi o automato de estados e as tabelas ACTION/GOTO a partir da gramatica.
+ * Construi o automato de estados e as tabelas ACTION/GOTO a partir da
+ * gramatica.
  * Durante a analise, consome os tokens fornecidos pelo analisador lexico.
  */
 public class SyntacticAnalyzer {
@@ -76,14 +77,15 @@ public class SyntacticAnalyzer {
         Grammar grammar = new Grammar();
 
         grammar.add("S'", "Program");
-        grammar.add("Program", "program", "identifier", "begin", "DeclListOpt", "StmtList", "end", ".");
+        grammar.add("Program", "program", "identifier", "DeclList", "begin", "StmtList", "end", ".");
 
         // Declaracoes e tipos.
         grammar.add("DeclListOpt", "DeclList");
         grammar.add("DeclListOpt");
         grammar.add("DeclList", "Decl", ";");
         grammar.add("DeclList", "DeclList", "Decl", ";");
-        grammar.add("Decl", "IdentList", "=", "Type");
+        // Modificação na gramática: Para não gerar conflitos na tabela do parser, o modo de declaração de variáveis foi alterado
+        grammar.add("Decl", "Type", "IdentList");
         grammar.add("IdentList", "identifier");
         grammar.add("IdentList", "IdentList", ",", "identifier");
         grammar.add("Type", "int");
@@ -214,8 +216,8 @@ public class SyntacticAnalyzer {
         for (LR1Line item : state.productions) {
             int dotIndex = item.right.indexOf("<DOT>");
             if (dotIndex >= 0
-                && dotIndex + 1 < item.right.size()
-                && item.right.get(dotIndex + 1).equals(symbol)) {
+                    && dotIndex + 1 < item.right.size()
+                    && item.right.get(dotIndex + 1).equals(symbol)) {
                 List<String> movedRight = new ArrayList<>(item.right);
                 movedRight.remove(dotIndex);
                 movedRight.add(dotIndex + 1, "<DOT>");
@@ -272,9 +274,9 @@ public class SyntacticAnalyzer {
                     putAction(state.number, item.lookahead, new ParserTableEntry("accept", 0));
                 } else {
                     putAction(
-                        state.number,
-                        item.lookahead,
-                        new ParserTableEntry("reduce", productionNumber));
+                            state.number,
+                            item.lookahead,
+                            new ParserTableEntry("reduce", productionNumber));
                 }
             }
         }
@@ -287,9 +289,9 @@ public class SyntacticAnalyzer {
         Map<String, ParserTableEntry> row = actionTable.get(stateNumber);
         ParserTableEntry existing = row.get(terminal);
         if (existing != null
-            && (!existing.operation.equals(action.operation) || existing.value != action.value)) {
+                && (!existing.operation.equals(action.operation) || existing.value != action.value)) {
             throw new IllegalStateException(
-                "Conflito LR(1) no estado " + stateNumber + " para o terminal " + terminal);
+                    "Conflito LR(1) no estado " + stateNumber + " para o terminal " + terminal);
         }
         row.put(terminal, action);
     }
@@ -302,11 +304,11 @@ public class SyntacticAnalyzer {
      *
      * @param lexer analisador lexico que fornece os tokens
      * @throws java.io.IOException se ocorrer um erro de leitura
-     * @throws LexicalException se o lexer detectar um erro
-     * @throws SyntacticException se nao houver acao para o estado e lookahead
+     * @throws LexicalException    se o lexer detectar um erro
+     * @throws SyntacticException  se nao houver acao para o estado e lookahead
      */
     public void runSyntacticAnalysis(LexicalAnalyzer lexer)
-        throws java.io.IOException, LexicalException, SyntacticException {
+            throws java.io.IOException, LexicalException, SyntacticException {
         accepted = false;
         List<Integer> stateStack = new ArrayList<>();
         stateStack.add(initialState.number);
@@ -321,11 +323,11 @@ public class SyntacticAnalyzer {
 
             if (action == null) {
                 String tokenDescription = lookahead == null
-                    ? "fim do arquivo"
-                    : "'" + lookahead.toString() + "'";
+                        ? "fim do arquivo"
+                        : "'" + lookahead.toString() + "'";
                 throw new SyntacticException(
-                    lookaheadLine,
-                    "token inesperado " + tokenDescription);
+                        lookaheadLine,
+                        "token inesperado " + tokenDescription);
             }
 
             if (action.operation.equals("shift")) {
@@ -342,7 +344,7 @@ public class SyntacticAnalyzer {
                 Integer nextState = gotoTable.get(previousState).get(production.left);
                 if (nextState == null) {
                     throw new IllegalStateException(
-                        "GOTO ausente para o estado " + previousState + " e " + production.left);
+                            "GOTO ausente para o estado " + previousState + " e " + production.left);
                 }
                 stateStack.add(nextState);
             } else {
@@ -364,29 +366,52 @@ public class SyntacticAnalyzer {
         }
 
         switch (token.tag) {
-            case Tag.PROGRAM: return "program";
-            case Tag.ID: return "identifier";
-            case Tag.BEGIN: return "begin";
-            case Tag.END: return "end";
-            case Tag.IF: return "if";
-            case Tag.THEN: return "then";
-            case Tag.ELSE: return "else";
-            case Tag.WHILE: return "while";
-            case Tag.DO: return "do";
-            case Tag.REPEAT: return "repeat";
-            case Tag.UNTIL: return "until";
-            case Tag.READ: return "read";
-            case Tag.WRITE: return "write";
-            case Tag.NUM: return "integer_const";
-            case Tag.REAL: return "float_const";
-            case Tag.CHAR_CONST: return "char_const";
-            case Tag.LITERAL: return "literal";
-            case Tag.EQ: return "==";
-            case Tag.NE: return "!=";
-            case Tag.LE: return "<=";
-            case Tag.GE: return ">=";
-            case Tag.OR: return "||";
-            case Tag.AND: return "&&";
+            case Tag.PROGRAM:
+                return "program";
+            case Tag.ID:
+                return "identifier";
+            case Tag.BEGIN:
+                return "begin";
+            case Tag.END:
+                return "end";
+            case Tag.IF:
+                return "if";
+            case Tag.THEN:
+                return "then";
+            case Tag.ELSE:
+                return "else";
+            case Tag.WHILE:
+                return "while";
+            case Tag.DO:
+                return "do";
+            case Tag.REPEAT:
+                return "repeat";
+            case Tag.UNTIL:
+                return "until";
+            case Tag.READ:
+                return "read";
+            case Tag.WRITE:
+                return "write";
+            case Tag.NUM:
+                return "integer_const";
+            case Tag.REAL:
+                return "float_const";
+            case Tag.CHAR_CONST:
+                return "char_const";
+            case Tag.LITERAL:
+                return "literal";
+            case Tag.EQ:
+                return "==";
+            case Tag.NE:
+                return "!=";
+            case Tag.LE:
+                return "<=";
+            case Tag.GE:
+                return ">=";
+            case Tag.OR:
+                return "||";
+            case Tag.AND:
+                return "&&";
             case Tag.BASIC:
                 if (token instanceof Word) {
                     return ((Word) token).getLexeme();
@@ -410,9 +435,9 @@ public class SyntacticAnalyzer {
         /**
          * Cria um item a partir dos simbolos do lado direito.
          *
-         * @param left nao terminal do lado esquerdo
+         * @param left      nao terminal do lado esquerdo
          * @param lookahead terminal de antecipacao
-         * @param right simbolos do lado direito, incluindo o marcador de ponto
+         * @param right     simbolos do lado direito, incluindo o marcador de ponto
          */
         public LR1Line(String left, String lookahead, String... right) {
             this.left = left;
@@ -566,8 +591,8 @@ public class SyntacticAnalyzer {
         private boolean containsItem(List<LR1Line> items, LR1Line candidate) {
             for (LR1Line existing : items) {
                 if (existing.left.equals(candidate.left)
-                    && existing.right.equals(candidate.right)
-                    && existing.lookahead.equals(candidate.lookahead)) {
+                        && existing.right.equals(candidate.right)
+                        && existing.lookahead.equals(candidate.lookahead)) {
                     return true;
                 }
             }

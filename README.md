@@ -6,7 +6,7 @@ Trabalho prático da disciplina de Compiladores. O projeto realiza a análise l�
 
 ## Requisitos
 
-- JDK 8 ou superior instalado.
+- JDK 9 ou superior instalado.
 
 ## Como usar
 
@@ -17,17 +17,10 @@ javac *.java
 java Compiler testes_corrigidos/teste1_corrigido.txt
 ```
 
-Também é possível executar o JAR, se ele estiver disponível:
+Caso esteja utilizando o JAR, execute-o assim:
 
 ```bash
-java -jar TP1-Compiladores.jar testes_corrigidos/teste1_corrigido.txt
-```
-
-Para compilar as classes e gerar o JAR:
-
-```bash
-javac --release 8 *.java
-jar cfe TP1-Compiladores.jar Compiler *.class
+java -jar TP-Compiladores.jar testes_corrigidos/teste1_corrigido.txt
 ```
 
 O programa informa sucesso quando a análise sintática aceita a entrada. Se encontrar um erro léxico ou sintático, exibe o primeiro erro e sua linha.

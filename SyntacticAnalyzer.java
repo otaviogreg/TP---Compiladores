@@ -1,6 +1,11 @@
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 // A excecao sintatica guarda a linha e a mensagem do erro (assim como pedido), separadamente da excecao lexica. Mantivemos os mesmos moldes para fins de padronização
 class SyntacticException extends Exception {
@@ -18,7 +23,8 @@ class SyntacticException extends Exception {
 
 public class SyntacticAnalyzer {
     private boolean accepted;
-    private List<LR1Line> initialState;
+    private static int nextStateNumber;
+    private State initialState;
 
     // Implementação global da gramática para uso pelo algoritmo de reconhecimento LR(1).
     private static final Grammar GRAMMAR = createGrammar();
@@ -95,27 +101,21 @@ public class SyntacticAnalyzer {
         grammar.add("Constant", "float_const");
         grammar.add("Constant", "char_const");
 
+        grammar.computeFirstSets();
         return grammar;
     }
 
-    private List<LR1Line> createInitialState() {
-        List<LR1Line> state = new ArrayList<>();
-        state.add(new LR1Line("S'", "$", ".", "Program"));
-        state.add(new LR1Line(
-            "Program",
-            "$",
-            ".",
-            "program",
-            "identifier",
-            "begin",
-            "DeclListOpt",
-            "StmtList",
-            "end",
-            "."));
-        return state;
+    private State createInitialState() {
+        List<LR1Line> initialProductions = new ArrayList<>();
+        initialProductions.add(new LR1Line("S'", "$", "<DOT>", "Program"));
+        return createState(initialProductions);
     }
 
-    public List<LR1Line> getInitialState() {
+    public State createState(List<LR1Line> productions) {
+        return new State(productions);
+    }
+
+    public State getInitialState() {
         return initialState;
     }
 
@@ -124,9 +124,15 @@ public class SyntacticAnalyzer {
         private List<String> right;
         private String lookahead;
 
-        private LR1Line(String left, String lookahead, String... right) {
+        public LR1Line(String left, String lookahead, String... right) {
             this.left = left;
             this.right = new ArrayList<>(Arrays.asList(right));
+            this.lookahead = lookahead;
+        }
+
+        private LR1Line(String left, String lookahead, List<String> right) {
+            this.left = left;
+            this.right = new ArrayList<>(right);
             this.lookahead = lookahead;
         }
 
@@ -143,11 +149,191 @@ public class SyntacticAnalyzer {
         }
     }
 
+    public class State {
+        private ArrayList<LR1Line> initialProductions;
+        private ArrayList<LR1Line> productions;
+        private int number;
+
+        private State(List<LR1Line> initialProductions) {
+            number = nextStateNumber++;
+            this.initialProductions = new ArrayList<>();
+            productions = new ArrayList<>();
+            for (LR1Line production : initialProductions) {
+                addInitialProduction(production);
+            }
+            computeClosure();
+        }
+
+        public ArrayList<LR1Line> getInitialProductions() {
+            return initialProductions;
+        }
+
+        public ArrayList<LR1Line> getProductions() {
+            return productions;
+        }
+
+        public int getNumber() {
+            return number;
+        }
+
+        // Função de comparação do núcleo do estado para evitar criar dois estados com as mesmas produções iniciais.
+        public boolean hasSameKernel(List<LR1Line> candidateKernel) {
+            if (candidateKernel == null) {
+                return false;
+            }
+
+            List<LR1Line> uniqueCandidates = new ArrayList<>();
+            for (LR1Line candidate : candidateKernel) {
+                if (!containsItem(uniqueCandidates, candidate)) {
+                    uniqueCandidates.add(candidate);
+                }
+            }
+
+            if (initialProductions.size() != uniqueCandidates.size()) {
+                return false;
+            }
+
+            for (LR1Line production : initialProductions) {
+                if (!containsItem(uniqueCandidates, production)) {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        private void computeClosure() {
+            for (int i = 0; i < productions.size(); i++) {
+                LR1Line item = productions.get(i);
+                int dotIndex = item.right.indexOf("<DOT>");
+                if (dotIndex < 0) {
+                    throw new IllegalArgumentException("Item LR(1) sem ponto: " + item.left);
+                }
+
+                int symbolIndex = dotIndex + 1;
+                if (symbolIndex >= item.right.size()) {
+                    continue;
+                }
+
+                String symbol = item.right.get(symbolIndex);
+                if (!GRAMMAR.isNonTerminal(symbol)) {
+                    continue;
+                }
+
+                List<String> suffix = item.right.subList(symbolIndex + 1, item.right.size());
+                Set<String> lookaheads = GRAMMAR.firstOfSequence(suffix, item.lookahead);
+                for (Production production : GRAMMAR.getProductionsFor(symbol)) {
+                    List<String> dottedRight = new ArrayList<>();
+                    dottedRight.add("<DOT>");
+                    dottedRight.addAll(production.right);
+
+                    for (String lookahead : lookaheads) {
+                        addIfMissing(new LR1Line(production.left, lookahead, dottedRight));
+                    }
+                }
+            }
+        }
+
+        private void addInitialProduction(LR1Line candidate) {
+            if (!containsItem(initialProductions, candidate)) {
+                initialProductions.add(candidate);
+                addIfMissing(candidate);
+            }
+        }
+
+        private void addIfMissing(LR1Line candidate) {
+            if (!containsItem(productions, candidate)) {
+                productions.add(candidate);
+            }
+        }
+
+        private boolean containsItem(List<LR1Line> items, LR1Line candidate) {
+            for (LR1Line existing : items) {
+                if (existing.left.equals(candidate.left)
+                    && existing.right.equals(candidate.right)
+                    && existing.lookahead.equals(candidate.lookahead)) {
+                    return true;
+                }
+            }
+            return false;
+        }
+    }
+
     private static final class Grammar {
         private List<Production> productions = new ArrayList<>();
+        private Map<String, Set<String>> firstSets = new LinkedHashMap<>();
+        private Set<String> nullable = new HashSet<>();
 
         private void add(String left, String... right) {
             productions.add(new Production(left, right));
+        }
+
+        private void computeFirstSets() {
+            for (Production production : productions) {
+                firstSets.putIfAbsent(production.left, new LinkedHashSet<>());
+            }
+
+            boolean changed;
+            do {
+                changed = false;
+                for (Production production : productions) {
+                    boolean allNullable = true;
+                    for (String symbol : production.right) {
+                        if (isNonTerminal(symbol)) {
+                            changed |= firstSets.get(production.left).addAll(firstSets.get(symbol));
+                            if (!nullable.contains(symbol)) {
+                                allNullable = false;
+                                break;
+                            }
+                        } else {
+                            changed |= firstSets.get(production.left).add(symbol);
+                            allNullable = false;
+                            break;
+                        }
+                    }
+
+                    if (allNullable) {
+                        changed |= nullable.add(production.left);
+                    }
+                }
+            } while (changed);
+        }
+
+        private boolean isNonTerminal(String symbol) {
+            return firstSets.containsKey(symbol);
+        }
+
+        private List<Production> getProductionsFor(String left) {
+            List<Production> matchingProductions = new ArrayList<>();
+            for (Production production : productions) {
+                if (production.left.equals(left)) {
+                    matchingProductions.add(production);
+                }
+            }
+            return matchingProductions;
+        }
+
+        private Set<String> firstOfSequence(List<String> sequence, String trailingLookahead) {
+            Set<String> result = new LinkedHashSet<>();
+            boolean allNullable = true;
+
+            for (String symbol : sequence) {
+                if (isNonTerminal(symbol)) {
+                    result.addAll(firstSets.get(symbol));
+                    if (!nullable.contains(symbol)) {
+                        allNullable = false;
+                        break;
+                    }
+                } else {
+                    result.add(symbol);
+                    allNullable = false;
+                    break;
+                }
+            }
+
+            if (allNullable) {
+                result.add(trailingLookahead);
+            }
+            return result;
         }
     }
 

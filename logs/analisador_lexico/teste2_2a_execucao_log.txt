@@ -71,17 +71,24 @@ Token de número 69, linha 14, tag: 46 e representacao: .
 Tabela de Simbolos:
 
 Lexema: _var e tag: 263
+Lexema: true e tag: 271
 Lexema: int e tag: 257
+Lexema: false e tag: 261
+Lexema: <= e tag: 265
+Lexema: && e tag: 256
 Lexema: teste2 e tag: 263
-Lexema: end e tag: 275
 Lexema: until e tag: 280
+Lexema: end e tag: 275
 Lexema: program e tag: 273
 Lexema: repeat e tag: 279
+Lexema: == e tag: 260
+Lexema: || e tag: 268
 Lexema: if e tag: 264
 Lexema: while e tag: 272
 Lexema: do e tag: 258
 Lexema: read e tag: 276
 Lexema: else e tag: 259
+Lexema: >= e tag: 262
 Lexema: write e tag: 277
 Lexema: then e tag: 278
 Lexema: d e tag: 263
@@ -90,6 +97,7 @@ Lexema: c e tag: 263
 Lexema: begin e tag: 274
 Lexema: b e tag: 263
 Lexema: a e tag: 263
+Lexema: != e tag: 266
 Lexema: Read e tag: 263
 Lexema: float e tag: 257
 Lexema: val e tag: 263

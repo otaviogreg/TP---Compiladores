@@ -1,0 +1,23 @@
+Execução 01:
+Erro sintatico na linha 1: token inesperado 'programa'
+
+Execução 02:
+Erro sintatico na linha 5: token inesperado 'pontuacao'
+
+Execução 03:
+Erro sintatico na linha 6: token inesperado 'pontuacaoMinima'
+
+Execução 04:
+Erro sintatico na linha 16: token inesperado 'do'
+
+Execução 05:
+Erro sintatico na linha 23: token inesperado 'write'
+
+Execução 06:
+Erro sintatico na linha 28: token inesperado 'end'
+
+Execução 07:
+Erro sintatico na linha 29: token inesperado fim do arquivo
+
+Execução 08:
+Analise sintatica concluida com sucesso.

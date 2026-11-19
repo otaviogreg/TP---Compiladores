@@ -1,0 +1,15 @@
+program teste2
+
+    int a, b, c;
+    float d, _var;
+
+begin
+    teste2 = 1;
+    read (a);
+    b = a * a;
+    c = b + a/2 * (35/b);
+    write (c);
+    val = 34.0;
+    c = val + 2.2 + a;
+    write (val)
+end.

@@ -1,0 +1,20 @@
+Execução 01:
+Erro sintatico na linha 3: token inesperado 'a'
+
+Execução 02:
+Erro sintatico na linha 3: token inesperado '1.0'
+
+Execução 03:
+Erro sintatico na linha 4: token inesperado 'd'
+
+Execução 04:
+Erro sintatico na linha 6: token inesperado 'teste2'
+
+Execução 05:
+Erro sintatico na linha 8: token inesperado '('
+
+Execução 06:
+Erro sintatico na linha 12: token inesperado ':'
+
+Execução 07:
+Analise sintatica concluida com sucesso.

@@ -1,0 +1,21 @@
+program teste3
+    int a, aux;
+    float b;
+
+    begin
+        b = 0;
+        read (a);
+        read(b);
+        if (a>b) then
+            aux = b;
+            b = a;
+            a = aux
+        end;
+        write(a);
+        write(b);
+
+        if (a%2 == 0) then
+            write ("Par")
+        else write ("Impar")
+        end
+end. 

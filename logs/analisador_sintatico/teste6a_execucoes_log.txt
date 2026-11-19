@@ -1,0 +1,11 @@
+Execução 01:
+Erro sintatico na linha 5: token inesperado 'a'
+
+Execução 02:
+Erro sintatico na linha 6: token inesperado 'media'
+
+Execução 03:
+Erro sintatico na linha 7: token inesperado 'letra'
+
+Execução 04:
+Analise sintatica concluida com sucesso.

@@ -1,11 +1,12 @@
-program teste1
+programa teste1
+
 {*Calculo de perimetro e area*}
-  float base, altura;
-  float perimetro;
-  float area, a;
+  base, altura : float;
+  perimetro : float;
+  area, a is float;
 
 begin
-  write("Entre com a altura do retangulo:");
+  Write("Entre com a altura do retangulo:");
   read(altura);
   write("Entre com a base do retangulo:");
   read(base);
@@ -14,9 +15,9 @@ begin
 
   perimetro = 2*base + 2*altura;
 
-  write ("Area: ");
+  write "Area: ";
   write (area);
   write ("Perímetro: ");
-  write (area)
+  write (area);
   
 end.

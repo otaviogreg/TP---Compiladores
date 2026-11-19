@@ -1,0 +1,20 @@
+Execução 01:
+Erro sintatico na linha 4: token inesperado 'a'
+
+Execução 02:
+Erro sintatico na linha 5: token inesperado 'opc'
+
+Execução 03:
+Erro sintatico na linha 18: token inesperado 'end'
+
+Execução 04:
+Erro sintatico na linha 23: token inesperado 'else'
+
+Execução 05:
+Erro sintatico na linha 30: token inesperado 'until'
+
+Execução 06:
+Erro sintatico na linha 30: token inesperado '=='
+
+Execução 07:
+Analise sintatica concluida com sucesso.

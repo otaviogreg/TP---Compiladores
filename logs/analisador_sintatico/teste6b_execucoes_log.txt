@@ -1,0 +1,17 @@
+Execução 01:
+Erro sintatico na linha 9: token inesperado 'x'
+
+Execução 02:
+Erro sintatico na linha 11: token inesperado 'total'
+
+Execução 03:
+Erro sintatico na linha 11: token inesperado ';'
+
+Execução 04:
+Erro sintatico na linha 14: token inesperado ';'
+
+Execução 05:
+Erro sintatico na linha 18: token inesperado fim do arquivo
+
+Execução 06:
+Analise sintatica concluida com sucesso.

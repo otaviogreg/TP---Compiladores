@@ -1,0 +1,23 @@
+Execução 01:
+Erro sintatico na linha 1: token inesperado 'programa'
+
+Execução 02:
+Erro sintatico na linha 4: token inesperado 'base'
+
+Execução 03:
+Erro sintatico na linha 5: token inesperado 'perimetro'
+
+Execução 04:
+Erro sintatico na linha 6: token inesperado 'area'
+
+Execução 05:
+Erro sintatico na linha 9: token inesperado '('
+
+Execução 06:
+Erro sintatico na linha 18: token inesperado 'Area: '
+
+Execução 07:
+Erro sintatico na linha 23: token inesperado 'end'
+
+Execução 08:
+Analise sintatica concluida com sucesso.

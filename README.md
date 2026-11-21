@@ -20,7 +20,7 @@ java Compiler testes_corrigidos/teste1_corrigido.txt
 Caso esteja utilizando o JAR, execute-o assim:
 
 ```bash
-java -jar TP-Compiladores.jar testes_corrigidos/teste1_corrigido.txt
+java -jar TP2-Compiladores.jar programas_corrigidos_sintatico/teste1_corrigido.txt
 ```
 
 O programa informa sucesso quando a análise sintática aceita a entrada. Se encontrar um erro léxico ou sintático, exibe o primeiro erro e sua linha.
